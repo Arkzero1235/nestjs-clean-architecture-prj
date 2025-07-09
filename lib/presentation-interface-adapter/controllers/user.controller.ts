@@ -3,7 +3,7 @@ import { UserUseCases } from "lib/application/use-case/user/user.use-case";
 import { UpdateUserDto } from "lib/domain-core/dtos/UpdateUserDto";
 import { CreateReqDto } from "../dtos/CreateReqDto";
 import { CreateDtoMapper } from "lib/presentation-interface-adapter/mappers/CreateDtoMapper";
-import { ApiResponseHelper } from "lib/helper/response-helper";
+import { ApiResponseHelper } from "lib/presentation-interface-adapter/helper/response-helper";
 
 @Controller('/user')
 export class UserController {

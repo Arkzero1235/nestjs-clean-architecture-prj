@@ -2,7 +2,7 @@ import { Body, Controller, Post, Req, Res } from "@nestjs/common";
 import { AuthUseCase } from "lib/application/use-case/auth/auth.use-case";
 import { LoginReqDto } from "../dtos/LoginReqDto";
 import { LoginDtoMapper } from "lib/presentation-interface-adapter/mappers/LoginDtoMapper";
-import { ApiResponseHelper } from "lib/helper/response-helper";
+import { ApiResponseHelper } from "lib/presentation-interface-adapter/helper/response-helper";
 import { Response, Request } from 'express';
 
 @Controller('/auth')
