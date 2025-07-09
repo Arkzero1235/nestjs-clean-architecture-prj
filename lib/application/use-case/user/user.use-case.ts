@@ -1,9 +1,9 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
-import { CreateUserDto } from "lib/application/dtos/CreateUserDto";
-import { UpdateUserDto } from "lib/application/dtos/UpdateUserDto";
+import { CreateUserDto } from "lib/domain-core/dtos/CreateUserDto";
+import { UpdateUserDto } from "lib/domain-core/dtos/UpdateUserDto";
 import { isUUID } from "class-validator";
-import { User } from "lib/domain/entities/User.entity";
-import { UserRepository } from "lib/domain/repositories/UserRepository";
+import { User } from "lib/domain-core/entities/User.entity";
+import { UserRepository } from "lib/domain-core/repositories/UserRepository";
 
 @Injectable()
 export class UserUseCases {
@@ -41,6 +41,7 @@ export class UserUseCases {
         // create new user
         const newUser = User.create(createUserDto);
 
+        // save to DB
         return this.userRepository.persist(newUser);
     }
 

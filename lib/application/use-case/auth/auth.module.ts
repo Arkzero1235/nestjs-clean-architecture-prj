@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common";
-import { InfrastructureModule } from "lib/infrastructure/persistence/other-repository-implement/data-service.module";
+import { InfrastructureModule } from "lib/infrastructure-framework/persistence/infrastructure.module";
 import { AuthUseCase } from "./auth.use-case";
 
 @Module({

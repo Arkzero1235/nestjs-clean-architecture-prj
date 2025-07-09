@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { UserUseCases } from './user.use-case';
-import { InfrastructureModule } from 'lib/infrastructure/persistence/other-repository-implement/data-service.module';
+import { InfrastructureModule } from 'lib/infrastructure-framework/persistence/infrastructure.module';
 
 @Module({
     imports: [InfrastructureModule],

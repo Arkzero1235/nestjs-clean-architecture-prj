@@ -1,21 +1,19 @@
 import { Inject, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
-import { TokenService } from "lib/domain/services/jwt/ITokenService";
-import { LoginDto } from "lib/application/dtos/LoginDto";
-import { AuthRepository } from "lib/domain/repositories/AuthRepository";
-import { UserRepository } from "lib/domain/repositories/UserRepository";
-import { ApiResponseHelper } from "lib/helper/response-helper";
-
+import { LoginDto } from "lib/domain-core/dtos/LoginDto";
+import { AuthRepository } from "lib/domain-core/repositories/AuthRepository";
+import { UserRepository } from "lib/domain-core/repositories/UserRepository";
+import { ITokenService } from "lib/domain-core/services/ITokenService";
 
 @Injectable()
 export class AuthUseCase {
     constructor(
         private authRepository: AuthRepository,
         private userRepository: UserRepository,
-        @Inject('ITokenService') private readonly tokenService: TokenService
+        private iTokenService: ITokenService
     ) { }
 
-    // Use case: Đăng nhập
-    async login(loginDto: LoginDto): Promise<object> {
+    // Usecase: Đăng nhập
+    async login(loginDto: LoginDto) {
 
         const user = await this.userRepository.checkEmail(loginDto.email);
 
@@ -35,16 +33,21 @@ export class AuthUseCase {
             role: user.role
         }
 
-        const accessToken = this.tokenService.sign(payload);
+        const accessToken = this.iTokenService.generateAccessToken(payload);
 
-        return ApiResponseHelper.success(
-            "Login successed",
-            {
-                sub: user.id,
-                username: user.userName,
-                token: accessToken
-            },
-            200
-        )
+        const refreshToken = this.iTokenService.generateRefreshToken(payload);
+
+        return { id: user.id, accessToken, refreshToken }
+    }
+
+    // Usecase: Đăng xuất
+    async logout() {
+        return "Logout successed"
+    }
+
+    // Usecase: Cấp lại access token
+    async refresh(token: string): Promise<string> {
+        const payload = this.iTokenService.verifyRefreshToken(token);
+        return this.iTokenService.generateAccessToken({ payload });
     }
 }
