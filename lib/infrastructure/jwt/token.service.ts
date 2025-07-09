@@ -2,7 +2,7 @@
 
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { TokenService } from 'lib/application/service/jwt/ITokenService';
+import { TokenService } from 'lib/domain/services/jwt/ITokenService';
 
 @Injectable()
 export class JwtTokenService implements TokenService {

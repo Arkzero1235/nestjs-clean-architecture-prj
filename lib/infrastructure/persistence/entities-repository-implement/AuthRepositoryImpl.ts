@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from "@nestjs/common";
-import { AuthRepository } from "lib/domain/repository/AuthRepository";
-import { IPasswordHasher } from "lib/application/service/IPasswordHasher";
+import { AuthRepository } from "lib/domain/repositories/AuthRepository";
+import { IPasswordHasher } from "lib/domain/services/IPasswordHasher";
 
 @Injectable()
 export class AuthRepositoryImpl implements AuthRepository {
@@ -20,6 +20,10 @@ export class AuthRepositoryImpl implements AuthRepository {
             return true
 
         } catch (error) {
+            if (error instanceof UnauthorizedException) {
+                throw error;
+            }
+
             throw new InternalServerErrorException('Unexpected error occurred');
         }
     }

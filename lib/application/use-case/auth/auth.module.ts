@@ -1,21 +1,11 @@
-import { Module } from '@nestjs/common';
-import { AuthUseCase } from './auth.use-case';
-import { AuthRepository } from 'lib/domain/repository/AuthRepository';
-import { AuthRepositoryImpl } from 'lib/infrastructure/database/prisma-orm/AuthRepositoryImpl';
-import { InfrastructureModule } from 'lib/infrastructure/services/data-service/data-service.module';
-
+import { Module } from "@nestjs/common";
+import { InfrastructureModule } from "lib/infrastructure/persistence/other-repository-implement/data-service.module";
+import { AuthUseCase } from "./auth.use-case";
 
 @Module({
     imports: [InfrastructureModule],
-    providers: [
-        AuthUseCase,
-        {
-            provide: AuthRepository,
-            useClass: AuthRepositoryImpl
-        }
-    ],
+    providers: [AuthUseCase],
     exports: [AuthUseCase]
 })
+
 export class AuthModule { }
-
-

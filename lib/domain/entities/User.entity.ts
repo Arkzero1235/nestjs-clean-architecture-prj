@@ -1,7 +1,6 @@
 import { UserRole } from "@prisma/client";
-import e from "express";
-import { ResponseUserDto } from "../dto/ResponseUserDto";
-import { FullUserDto } from "../dto/FullUserDto";
+import { ResponseUserDto } from "../../application/dtos/ResponseUserDto";
+import { FullUserDto } from "../../application/dtos/FullUserDto";
 
 export class User {
     private readonly id: string;

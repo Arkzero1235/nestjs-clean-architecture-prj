@@ -1,15 +1,15 @@
 import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from "@nestjs/common";
-import { UserRepository } from "lib/domain/repository/UserRepository";
-import { PrismaService } from "./prisma.service";
-import { User } from "lib/domain/entity/User.entity";
-import { IPasswordHasher } from "lib/application/service/IPasswordHasher";
+import { UserRepository } from "lib/domain/repositories/UserRepository";
+import { PrismaService } from "../../database/prisma-orm/prisma.service";
+import { User } from "lib/domain/entities/User.entity";
+import { IPasswordHasher } from "lib/domain/services/IPasswordHasher";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { UpdateUserDto } from "lib/domain/dto/UpdateUserDto";
+import { UpdateUserDto } from "lib/application/dtos/UpdateUserDto";
 import { ApiResponseHelper } from "lib/helper/response-helper";
-import { ResponseUserDto } from "lib/domain/dto/ResponseUserDto";
+import { ResponseUserDto } from "lib/application/dtos/ResponseUserDto";
 
 @Injectable()
-export class PrismaUserRepository implements UserRepository {
+export class UserRepositoryImpl implements UserRepository {
     constructor(
         private prismaService: PrismaService,
         private iPasswordHasher: IPasswordHasher

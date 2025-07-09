@@ -1,48 +1,45 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
-import { UserFactoryService } from "./user.factory";
-import { UserRepository } from "lib/domain/repository/UserRepository";
-import { CreateUserDto } from "lib/domain/dto/CreateUserDto";
-import { UpdateUserDto } from "lib/domain/dto/UpdateUserDto";
+import { CreateUserDto } from "lib/application/dtos/CreateUserDto";
+import { UpdateUserDto } from "lib/application/dtos/UpdateUserDto";
 import { isUUID } from "class-validator";
-import { LoginDto } from "lib/domain/dto/LoginDto";
+import { User } from "lib/domain/entities/User.entity";
+import { UserRepository } from "lib/domain/repositories/UserRepository";
 
 @Injectable()
 export class UserUseCases {
     constructor(
-        private userFactoryService: UserFactoryService,
         private userRepository: UserRepository
     ) { }
 
-    async createUser(creaUserDto: CreateUserDto): Promise<object> {
+    async createUser(createUserDto: CreateUserDto): Promise<object> {
 
         // check value  
-        if (!creaUserDto.email) {
+        if (!createUserDto.email) {
             throw new BadRequestException("Email is required")
         }
 
-        if (!creaUserDto.plainPassword) {
+        if (!createUserDto.password) {
             throw new BadRequestException("Password is required")
         }
 
 
-        if (!creaUserDto.username) {
+        if (!createUserDto.username) {
             throw new BadRequestException("Username is required")
         }
 
-
-        if (!creaUserDto.role) {
+        if (!createUserDto.role) {
             throw new BadRequestException("Role is required")
         }
 
         // Check if email is exist
-        const existingEmail = await this.userRepository.checkEmail(creaUserDto.email);
+        const existingEmail = await this.userRepository.checkEmail(createUserDto.email);
 
         if (existingEmail) {
             throw new ConflictException("Email is already in use");
         }
 
         // create new user
-        const newUser = this.userFactoryService.createUser(creaUserDto);
+        const newUser = User.create(createUserDto);
 
         return this.userRepository.persist(newUser);
     }

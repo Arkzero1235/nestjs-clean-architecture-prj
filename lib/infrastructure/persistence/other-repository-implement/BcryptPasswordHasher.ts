@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { IPasswordHasher } from "lib/application/service/IPasswordHasher";
+import { IPasswordHasher } from "lib/domain/services/IPasswordHasher";
 import * as argon2 from 'argon2';
 
 @Injectable()

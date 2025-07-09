@@ -1,8 +1,8 @@
 import { Inject, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
-import { TokenService } from "lib/application/service/jwt/ITokenService";
-import { LoginDto } from "lib/domain/dto/LoginDto";
-import { AuthRepository } from "lib/domain/repository/AuthRepository";
-import { UserRepository } from "lib/domain/repository/UserRepository";
+import { TokenService } from "lib/domain/services/jwt/ITokenService";
+import { LoginDto } from "lib/application/dtos/LoginDto";
+import { AuthRepository } from "lib/domain/repositories/AuthRepository";
+import { UserRepository } from "lib/domain/repositories/UserRepository";
 import { ApiResponseHelper } from "lib/helper/response-helper";
 
 

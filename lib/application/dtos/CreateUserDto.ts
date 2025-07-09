@@ -14,7 +14,7 @@ export class CreateUserDto {
 
     @IsNotEmpty()
     @IsString()
-    plainPassword: string
+    password: string
 
     @IsNotEmpty()
     @IsEnum(UserRole)
