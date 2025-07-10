@@ -1,14 +1,17 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './application/use-case/user/user.module';
-import { UserController } from './presentation-interface-adapter/controllers/user.controller';
-import { AuthController } from './presentation-interface-adapter/controllers/auth.controller';
-import { AuthModule } from './application/use-case/auth/auth.module';
+import { UserModule } from './use-case/user/user.module';
+import { UserController } from './interface/controllers/user.controller';
+import { AuthController } from './interface/controllers/auth.controller';
+import { AuthModule } from './use-case/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { WINSTON_MODULE_NEST_PROVIDER, WinstonModule } from 'nest-winston';
+import { winstonConfig } from './logger.config';
 
 @Module({
   imports: [
+    WinstonModule.forRoot(winstonConfig),
     ConfigModule.forRoot({
       isGlobal: true, // cho phép dùng ở mọi nơi
       envFilePath: '.env',
@@ -21,6 +24,12 @@ import { ConfigModule } from '@nestjs/config';
     AuthController,
     UserController
   ],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: Logger,
+      useExisting: WINSTON_MODULE_NEST_PROVIDER,
+    },
+  ],
 })
 export class AppModule { }
