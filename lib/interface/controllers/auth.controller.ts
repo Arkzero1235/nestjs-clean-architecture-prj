@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Req, Res } from "@nestjs/common";
 import { AuthUseCase } from "lib/use-case/auth/auth.use-case";
 import { LoginReqDto } from "../dtos/LoginReqDto";
-import { LoginDtoMapper } from "../mappers/LoginDtoMapper";
+import { ReqMapper } from "../mappers/ReqMapper";
 import { ApiResponseHelper } from "../helper/response-helper";
 import { Response, Request } from 'express';
 
@@ -11,7 +11,7 @@ export class AuthController {
 
     @Post('/login')
     async login(@Body() loginReqDto: LoginReqDto, @Res({ passthrough: true }) res: Response) {
-        const mapLoginData = LoginDtoMapper.map(loginReqDto);
+        const mapLoginData = ReqMapper.LoginMapper(loginReqDto);
 
         const { id, accessToken, refreshToken } = await this.authUseCase.login(mapLoginData);
 

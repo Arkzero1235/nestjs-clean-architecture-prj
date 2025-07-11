@@ -1,5 +1,6 @@
 import { ResponseUserDto } from "lib/domain/dtos/user/ResponseUserDto";
-import { ResDto } from "../dtos/ResDto";
+import { ResUserDto } from "../dtos/user/ResUserDto";
+import { ResponseAdminDto } from "lib/domain/dtos/admin/ResponseAdminDto";
 
 export class ResMapper {
 
@@ -7,7 +8,7 @@ export class ResMapper {
         return ormData;
     }
 
-    static mapCreatedData(ormData: any): ResDto {
+    static mapCreatedUserData(ormData: any): ResUserDto {
         return {
             id: ormData.id,
             username: ormData.userName,
@@ -16,7 +17,7 @@ export class ResMapper {
         }
     }
 
-    static mapResponseDto(ormData: any): ResponseUserDto {
+    static mapResponseUserDto(ormData: any): ResponseUserDto {
         return {
             id: ormData.id,
             userName: ormData.userName,
@@ -24,6 +25,16 @@ export class ResMapper {
             passwordHash: ormData.passwordHash,
             address: ormData.address,
             role: ormData.role
+        }
+    }
+
+    static mapResponseAdminDto(ormData: any): ResponseAdminDto {
+        return {
+            id: ormData.id,
+            email: ormData.email,
+            name: ormData.name,
+            password: ormData.password,
+            phone: ormData.phone
         }
     }
 

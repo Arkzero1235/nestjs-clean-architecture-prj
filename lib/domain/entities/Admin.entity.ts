@@ -35,7 +35,6 @@ export class Admin {
         email: string;
         password: string;
         phone: string;
-        role: string;
     }) {
         // Check validation
 

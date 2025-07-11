@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { UserRepository } from "lib/domain/repositories/UserRepository";
 import { PrismaService } from "../../database/prisma-orm/prisma.service";
 import { IPasswordHasher } from "lib/domain/services/IPasswordHasher";
@@ -30,7 +30,7 @@ export class UserRepositoryImpl implements UserRepository {
                 }
             })
 
-            return ResMapper.mapCreatedData(create_result);
+            return ResMapper.mapCreatedUserData(create_result);
 
         } catch (error) {
             if (
@@ -172,7 +172,7 @@ export class UserRepositoryImpl implements UserRepository {
                 return null
             }
 
-            return ResMapper.mapResponseDto(check_email_result) ?? null
+            return ResMapper.mapResponseUserDto(check_email_result) ?? null
 
         } catch (error) {
             console.error('❌ checkEmail ERROR:', error);

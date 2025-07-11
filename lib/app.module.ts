@@ -8,6 +8,8 @@ import { AuthModule } from './use-case/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { WINSTON_MODULE_NEST_PROVIDER, WinstonModule } from 'nest-winston';
 import { winstonConfig } from './logger.config';
+import { AdminModule } from './use-case/admin/admin.module';
+import { AdminController } from './interface/controllers/admin.controller';
 
 @Module({
   imports: [
@@ -18,11 +20,13 @@ import { winstonConfig } from './logger.config';
     }),
     UserModule,
     AuthModule,
+    AdminModule
   ],
   controllers: [
     AppController,
     AuthController,
-    UserController
+    UserController,
+    AdminController
   ],
   providers: [
     AppService,

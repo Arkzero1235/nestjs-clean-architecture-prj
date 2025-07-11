@@ -1,4 +1,4 @@
-export class ResDto {
+export class ResUserDto {
 
     id: string;
 

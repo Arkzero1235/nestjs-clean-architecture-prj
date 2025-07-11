@@ -6,12 +6,14 @@ import { PrismaService } from "../database/prisma-orm/prisma.service";
 import { UserRepository } from "lib/domain/repositories/UserRepository";
 import { AuthRepository } from "lib/domain/repositories/AuthRepository";
 import { AuthRepositoryImpl } from "./entities-repository-implement/AuthRepositoryImpl";
-import { CreateDtoMapper } from "lib/interface/mappers/CreateDtoMapper";
+import { ReqMapper } from "lib/interface/mappers/ReqMapper";
 import { ITokenService } from "lib/domain/services/ITokenService";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { ITokenServiceImpl } from "../jwt/ITokenServiceImpl";
 import { WINSTON_MODULE_NEST_PROVIDER } from "nest-winston";
+import { AdminRepository } from "lib/domain/repositories/AdminRepository";
+import { AdminRepositoryImpl } from "./entities-repository-implement/AdminRepositoryImpl";
 @Module({
     imports: [
         JwtModule.registerAsync({
@@ -23,6 +25,8 @@ import { WINSTON_MODULE_NEST_PROVIDER } from "nest-winston";
         }),
     ],
     providers: [
+        ReqMapper,
+        PrismaService,
         {
             provide: ITokenService,
             useClass: ITokenServiceImpl
@@ -30,6 +34,10 @@ import { WINSTON_MODULE_NEST_PROVIDER } from "nest-winston";
         {
             provide: IPasswordHasher,
             useClass: BCryptPasswordHasher
+        },
+        {
+            provide: Logger,
+            useExisting: WINSTON_MODULE_NEST_PROVIDER,
         },
         {
             provide: UserRepository,
@@ -40,20 +48,19 @@ import { WINSTON_MODULE_NEST_PROVIDER } from "nest-winston";
             useClass: AuthRepositoryImpl
         },
         {
-            provide: Logger,
-            useExisting: WINSTON_MODULE_NEST_PROVIDER,
-        },
-        CreateDtoMapper,
-        PrismaService
+            provide: AdminRepository,
+            useClass: AdminRepositoryImpl
+        }
     ],
     exports: [
+        ReqMapper,
+        ITokenService,
+        Logger,
         IPasswordHasher,
         UserRepository,
         PrismaService,
         AuthRepository,
-        CreateDtoMapper,
-        ITokenService,
-        Logger
+        AdminRepository
     ],
 })
 export class InfrastructureModule { }

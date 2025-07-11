@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from "@nestjs/common";
 import { UserUseCases } from "lib/use-case/user/user.use-case";
 import { UpdateUserDto } from "lib/domain/dtos/user/UpdateUserDto";
-import { CreateReqDto } from "../dtos/CreateReqDto";
-import { CreateDtoMapper } from "../mappers/CreateDtoMapper";
+import { CreateReqDto } from "../dtos/user/CreateUserReqDto";
+import { ReqMapper } from "../mappers/ReqMapper";
 import { ApiResponseHelper } from "../helper/response-helper";
 
 @Controller('/user')
@@ -47,7 +47,7 @@ export class UserController {
 
     @Post()
     async create(@Body() create_user: CreateReqDto) {
-        const mapData = CreateDtoMapper.map(create_user); // map req data -> use case data
+        const mapData = ReqMapper.CreateUserMapper(create_user); // map req data -> use case data
         const result = await this.userUseCases.createUser(mapData);
 
         return ApiResponseHelper.success(
