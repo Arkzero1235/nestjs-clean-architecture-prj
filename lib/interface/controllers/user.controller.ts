@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Logger, Param, Patch, Post, Query } from "@nestjs/common";
 import { UserUseCases } from "lib/use-case/user/user.use-case";
 import { UpdateUserDto } from "lib/domain/dtos/user/UpdateUserDto";
 import { CreateReqDto } from "../dtos/user/CreateUserReqDto";
@@ -9,10 +9,13 @@ import { ApiResponseHelper } from "../helper/response-helper";
 export class UserController {
     constructor(
         private userUseCases: UserUseCases,
+        private readonly logger: Logger
     ) { }
 
     @Get()
     async getAll() {
+        this.logger.log("Get all users request received", "At user controller");
+
         const result = await this.userUseCases.getAllUser();
 
         return ApiResponseHelper.success(
@@ -25,6 +28,8 @@ export class UserController {
     // GET /user/by-email?email=abc@example.com
     @Get('/by-email')
     async getByEmail(@Query('email') email: string) {
+        this.logger.log("Get user by email request received", "At user controller");
+
         const result = await this.userUseCases.getByEmail(email);
 
         return ApiResponseHelper.success(
@@ -36,6 +41,8 @@ export class UserController {
 
     @Get(':id')
     async getById(@Param('id') id: string) {
+        this.logger.log("Get user by id request received", "At user controller");
+
         const result = await this.userUseCases.getById(id);
 
         return ApiResponseHelper.success(
@@ -47,6 +54,8 @@ export class UserController {
 
     @Post()
     async create(@Body() create_user: CreateReqDto) {
+        this.logger.log("Create user request received", "At user controller");
+
         const mapData = ReqMapper.CreateUserMapper(create_user); // map req data -> use case data
         const result = await this.userUseCases.createUser(mapData);
 
@@ -61,6 +70,8 @@ export class UserController {
     async update(
         @Param('id') id: string,
         @Body() updateUserDto: UpdateUserDto) {
+        this.logger.log("Update user request received", "At user controller");
+
         const result = await this.userUseCases.updateUser(id, updateUserDto);
 
         return ApiResponseHelper.success(
@@ -72,6 +83,8 @@ export class UserController {
 
     @Delete(':id')
     async remove(@Param('id') id: string) {
+        this.logger.log("Delete user request received", "At user controller");
+
         const result = await this.userUseCases.removeUser(id);
 
         return ApiResponseHelper.success(

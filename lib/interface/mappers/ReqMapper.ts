@@ -11,6 +11,10 @@ import { CreateCategoryReqDto } from "../dtos/category/CreateCategoryReqDto";
 import { CreateCategoryDto } from "lib/domain/dtos/category/CreateCategoryDto";
 import { UpdateCategoryReqDto } from "../dtos/category/UpdateCategoryReqDto";
 import { UpdateCategoryDto } from "lib/domain/dtos/category/UpdateCateGoryDto";
+import { CreateCommentReqDto } from "../dtos/comment/CreateCommentReqDto";
+import { CreateCommentDto } from "lib/domain/dtos/comment/CreateCommentDto";
+import { UpdateCommentReqDto } from "../dtos/comment/UpdateCommentReqDto";
+import { UpdateCommentDto } from "lib/domain/dtos/comment/UpdateCommentDto";
 
 export class ReqMapper {
     static LoginMapper(LoginReqDto: LoginReqDto): LoginDto {
@@ -49,15 +53,28 @@ export class ReqMapper {
         }
     }
 
-    static CreateCategoryMapper(createCateReqgory: CreateCategoryReqDto): CreateCategoryDto {
+    static CreateCategoryMapper(createCategoryReqDto: CreateCategoryReqDto): CreateCategoryDto {
         return {
-            name: createCateReqgory.name
+            name: createCategoryReqDto.name
         }
     }
 
-    static UpdateCategoryMapper(updateCateReqgory: UpdateCategoryReqDto): UpdateCategoryDto {
+    static UpdateCategoryMapper(updateCategoryReqDto: UpdateCategoryReqDto): UpdateCategoryDto {
         return {
-            name: updateCateReqgory.name
+            name: updateCategoryReqDto.name
+        }
+    }
+
+    static CreateCommentMapper(createCommentReqDto: CreateCommentReqDto): CreateCommentDto {
+        return {
+            userId: createCommentReqDto.userId,
+            content: createCommentReqDto.content
+        }
+    }
+
+    static UpdateCommentMapper(UpdateCommentReqDto: UpdateCommentReqDto): UpdateCommentDto {
+        return {
+            content: UpdateCommentReqDto.content
         }
     }
 }

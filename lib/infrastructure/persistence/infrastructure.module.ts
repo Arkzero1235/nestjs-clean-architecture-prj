@@ -16,6 +16,8 @@ import { AdminRepository } from "lib/domain/repositories/AdminRepository";
 import { AdminRepositoryImpl } from "./entities-repository-implement/AdminRepositoryImpl";
 import { CategoryRepository } from "lib/domain/repositories/CategoryRepository";
 import { CategoryRepositoryImpl } from "./entities-repository-implement/CategoryRepositoryImpl";
+import { CommentRepository } from "lib/domain/repositories/CommentRepository";
+import { CommentRepositoryImpl } from "./entities-repository-implement/CommentRepositoryImpl";
 @Module({
     imports: [
         JwtModule.registerAsync({
@@ -56,6 +58,10 @@ import { CategoryRepositoryImpl } from "./entities-repository-implement/Category
         {
             provide: CategoryRepository,
             useClass: CategoryRepositoryImpl
+        },
+        {
+            provide: CommentRepository,
+            useClass: CommentRepositoryImpl
         }
     ],
     exports: [
@@ -67,7 +73,8 @@ import { CategoryRepositoryImpl } from "./entities-repository-implement/Category
         PrismaService,
         AuthRepository,
         AdminRepository,
-        CategoryRepository
+        CategoryRepository,
+        CommentRepository
     ],
 })
 export class InfrastructureModule { }

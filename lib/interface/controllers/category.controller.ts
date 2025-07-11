@@ -21,7 +21,7 @@ export class CategoryController {
         return ApiResponseHelper.success(
             "Create category success",
             result,
-            200
+            201
         )
     }
 

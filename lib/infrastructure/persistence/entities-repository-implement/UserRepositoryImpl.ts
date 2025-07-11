@@ -95,7 +95,7 @@ export class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    async getById(id: string): Promise<object> {
+    async getById(id: string): Promise<object | null> {
         try {
             const get_by_id_result = await this.prismaService.user.findFirst({
                 where: {
@@ -104,7 +104,7 @@ export class UserRepositoryImpl implements UserRepository {
             })
 
             if (!get_by_id_result) {
-                throw new NotFoundException("User is not found")
+                return null
             }
 
             return ResMapper.mapResData(get_by_id_result);

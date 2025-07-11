@@ -17,5 +17,5 @@ export abstract class UserRepository {
     abstract checkEmail(email: string): Promise<ResponseUserDto | null>;
 
     abstract find(): Promise<object | null>;
-    
+
 }

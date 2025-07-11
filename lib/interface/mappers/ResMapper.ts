@@ -2,6 +2,7 @@ import { ResponseUserDto } from "lib/domain/dtos/user/ResponseUserDto";
 import { ResUserDto } from "../dtos/user/ResUserDto";
 import { ResponseAdminDto } from "lib/domain/dtos/admin/ResponseAdminDto";
 import { ResponseCategoryDto } from "lib/domain/dtos/category/ResponseCategory";
+import { ResponseCommentDto } from "lib/domain/dtos/comment/ResponseCommentDto";
 
 export class ResMapper {
 
@@ -49,6 +50,18 @@ export class ResMapper {
 
         return {
             name: ormData.name
+        }
+    }
+
+    static mapResponseCommentDto(ormData: any | any[]): ResponseCommentDto | ResponseCommentDto[] {
+        if (Array.isArray(ormData)) {
+            return ormData.map(comment => ({
+                content: comment.content
+            }))
+        }
+
+        return {
+            content: ormData.content
         }
     }
 

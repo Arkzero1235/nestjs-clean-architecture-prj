@@ -12,6 +12,8 @@ import { AdminModule } from './use-case/admin/admin.module';
 import { AdminController } from './interface/controllers/admin.controller';
 import { CategoryModule } from './use-case/category/category.module';
 import { CategoryController } from './interface/controllers/category.controller';
+import { CommentModule } from './use-case/comment/comment.module';
+import { CommentController } from './interface/controllers/comment.controller';
 
 @Module({
   imports: [
@@ -23,14 +25,16 @@ import { CategoryController } from './interface/controllers/category.controller'
     UserModule,
     AuthModule,
     AdminModule,
-    CategoryModule
+    CategoryModule,
+    CommentModule
   ],
   controllers: [
     AppController,
     AuthController,
     UserController,
     AdminController,
-    CategoryController
+    CategoryController,
+    CommentController
   ],
   providers: [
     AppService,

@@ -21,7 +21,7 @@ export class AdminController {
         return ApiResponseHelper.success(
             "Create admin success",
             result,
-            200
+            201
         )
     }
 
