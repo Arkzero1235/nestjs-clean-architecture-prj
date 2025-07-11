@@ -1,3 +1,5 @@
+import { CreateCategoryDto } from "../dtos/category/CreateCategoryDto";
+
 export class Category {
     private id: string;
     private name: string;
@@ -10,9 +12,7 @@ export class Category {
         return this.name;
     }
 
-    static Create(data: {
-        name: string;
-    }) {
+    static Create(data: CreateCategoryDto) {
         // Validate data
 
         return data;

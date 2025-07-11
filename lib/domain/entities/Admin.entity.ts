@@ -1,3 +1,5 @@
+import { CreateAdminDto } from "../dtos/admin/CreateAdminDto";
+
 export class Admin {
     private id: string;
     private name: string;
@@ -30,12 +32,7 @@ export class Admin {
         return this.role;
     }
 
-    static create(data: {
-        name: string;
-        email: string;
-        password: string;
-        phone: string;
-    }) {
+    static create(data: CreateAdminDto) {
         // Check validation
 
         return data;

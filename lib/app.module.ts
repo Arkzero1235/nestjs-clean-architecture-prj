@@ -10,6 +10,8 @@ import { WINSTON_MODULE_NEST_PROVIDER, WinstonModule } from 'nest-winston';
 import { winstonConfig } from './logger.config';
 import { AdminModule } from './use-case/admin/admin.module';
 import { AdminController } from './interface/controllers/admin.controller';
+import { CategoryModule } from './use-case/category/category.module';
+import { CategoryController } from './interface/controllers/category.controller';
 
 @Module({
   imports: [
@@ -20,13 +22,15 @@ import { AdminController } from './interface/controllers/admin.controller';
     }),
     UserModule,
     AuthModule,
-    AdminModule
+    AdminModule,
+    CategoryModule
   ],
   controllers: [
     AppController,
     AuthController,
     UserController,
-    AdminController
+    AdminController,
+    CategoryController
   ],
   providers: [
     AppService,

@@ -1,3 +1,5 @@
+import { CreateProductDto } from "../dtos/product/CreateProductDto";
+
 export class Product {
     private id: string;
     private name: string;
@@ -30,13 +32,7 @@ export class Product {
         return this.views;
     }
 
-    static Create(data: {
-        name: string;
-        price: number;
-        image: string;
-        stock: number;
-        views: number;
-    }) {
+    static Create(data: CreateProductDto) {
         // Validate data
 
         return data;

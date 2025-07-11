@@ -1,3 +1,4 @@
+import { CreateOrderDto } from "../dtos/order/CreateOrderDto";
 import { OrderStatus } from "../enums/OrderStatus";
 
 export class Order {
@@ -12,9 +13,7 @@ export class Order {
         return this.status;
     }
 
-    static Create(data: {
-        status: string;
-    }) {
+    static Create(data: CreateOrderDto) {
         // Validate data
 
         return data;

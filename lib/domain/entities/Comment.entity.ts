@@ -1,3 +1,5 @@
+import { CreateCommentDto } from "../dtos/comment/CreateCommentDto";
+
 export class Comment {
     private id: string;
     private content: string;
@@ -10,9 +12,7 @@ export class Comment {
         return this.content;
     }
 
-    static Create(data: {
-        content: string;
-    }) {
+    static Create(data: CreateCommentDto) {
         // Validate data
 
         return data;

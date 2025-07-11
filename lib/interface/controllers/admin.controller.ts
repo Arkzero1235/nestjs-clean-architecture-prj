@@ -15,7 +15,7 @@ export class AdminController {
 
     @Post()
     async create(@Body() createAdminReqDto: CreateAdminReqDto) {
-        this.logger.log("Create admin request received");
+        this.logger.log("Create admin request received", "At admin controller");
         const mappedData = ReqMapper.CreateAdminMapper(createAdminReqDto);
         const result = await this.adminUseCases.Create(mappedData);
         return ApiResponseHelper.success(
@@ -27,7 +27,7 @@ export class AdminController {
 
     @Patch("/:id")
     async Update(@Body() updateAdminReqDto: UpdateAdminReqDto, @Param("id") id: string) {
-        this.logger.log("Update admin request received");
+        this.logger.log("Update admin request received", "At admin controller");
         const mappedData = ReqMapper.UpdateAdminMapper(updateAdminReqDto);
         const result = await this.adminUseCases.Update(id, mappedData);
         return ApiResponseHelper.success(
@@ -39,7 +39,7 @@ export class AdminController {
 
     @Delete("/:id")
     async Remove(@Param("id") id: string) {
-        this.logger.log("Delete admin request received");
+        this.logger.log("Delete admin request received", "At admin controller");
         const result = await this.adminUseCases.Delete(id);
         return ApiResponseHelper.success(
             "Delete admin success",

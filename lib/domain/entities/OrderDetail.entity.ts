@@ -1,3 +1,5 @@
+import { CreateOrderDetailDto } from "../dtos/order-detail/CreateOrderDetailDto";
+
 export class OrderDetail {
     private id: string;
     private quantity: number;
@@ -25,12 +27,7 @@ export class OrderDetail {
         return this.total;
     }
 
-    static Create(data: {
-        quantity: number;
-        price: number;
-        status?: string;
-        total: number;
-    }) {
+    static Create(data: CreateOrderDetailDto) {
         // Validate data
 
         return data;

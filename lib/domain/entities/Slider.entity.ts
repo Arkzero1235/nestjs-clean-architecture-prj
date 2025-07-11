@@ -1,3 +1,5 @@
+import { CreateSliderDto } from "../dtos/slider/CreateSliderDto";
+
 export class Slider {
     private id: string;
     private title: string;
@@ -20,11 +22,7 @@ export class Slider {
         return this.image;
     }
 
-    static Create(data: {
-        title: string;
-        url: string;
-        image: string;
-    }) {
+    static Create(data: CreateSliderDto) {
         // Validate data
 
         return data;

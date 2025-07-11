@@ -14,6 +14,8 @@ import { ITokenServiceImpl } from "../jwt/ITokenServiceImpl";
 import { WINSTON_MODULE_NEST_PROVIDER } from "nest-winston";
 import { AdminRepository } from "lib/domain/repositories/AdminRepository";
 import { AdminRepositoryImpl } from "./entities-repository-implement/AdminRepositoryImpl";
+import { CategoryRepository } from "lib/domain/repositories/CategoryRepository";
+import { CategoryRepositoryImpl } from "./entities-repository-implement/CategoryRepositoryImpl";
 @Module({
     imports: [
         JwtModule.registerAsync({
@@ -50,6 +52,10 @@ import { AdminRepositoryImpl } from "./entities-repository-implement/AdminReposi
         {
             provide: AdminRepository,
             useClass: AdminRepositoryImpl
+        },
+        {
+            provide: CategoryRepository,
+            useClass: CategoryRepositoryImpl
         }
     ],
     exports: [
@@ -60,7 +66,8 @@ import { AdminRepositoryImpl } from "./entities-repository-implement/AdminReposi
         UserRepository,
         PrismaService,
         AuthRepository,
-        AdminRepository
+        AdminRepository,
+        CategoryRepository
     ],
 })
 export class InfrastructureModule { }

@@ -49,6 +49,7 @@ export class AdminRepositoryImpl implements AdminRepository {
             }
 
             return ResMapper.mapResponseAdminDto(check_email_result);
+
         } catch (error) {
             throw new InternalServerErrorException("Server error")
         }
@@ -91,6 +92,7 @@ export class AdminRepositoryImpl implements AdminRepository {
             let passwordHash: string;
             if (data.password) {
                 passwordHash = await this.iPasswordHasher.hash(data.password);
+                data.password = passwordHash;
             }
 
             const update_admin_result = await this.prismaService.admin.update({
@@ -100,7 +102,7 @@ export class AdminRepositoryImpl implements AdminRepository {
                 data
             })
 
-            return update_admin_result;
+            return ResMapper.mapResponseAdminDto(update_admin_result);
 
         } catch (error) {
             throw new InternalServerErrorException("Server error")
@@ -116,7 +118,7 @@ export class AdminRepositoryImpl implements AdminRepository {
                 }
             })
 
-            return delete_admin_result;
+            return ResMapper.mapResponseAdminDto(delete_admin_result);
         } catch (error) {
             throw new InternalServerErrorException("Server error");
         }
