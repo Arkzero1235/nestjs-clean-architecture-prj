@@ -1,3 +1,7 @@
+import { OrderStatus } from "lib/domain/enums/OrderStatus";
+
 export class UpdateOrderDto {
-    status?: string;
+    id: string;
+    userId: string;
+    status: OrderStatus;
 }

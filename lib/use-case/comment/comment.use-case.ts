@@ -18,10 +18,10 @@ export class CommentUseCases {
         // Validate data
 
         // Check existing user
-        const existingEmail = await this.userRepository.getById(createCommentDto.userId);
+        const existingUser = await this.userRepository.getById(createCommentDto.userId);
 
         // Log error
-        if (!existingEmail) {
+        if (!existingUser) {
             this.logger.error("Cannot found user", undefined, "At create comment usecase");
             throw new NotFoundException("Cannot found user to create comment");
         }
@@ -86,10 +86,10 @@ export class CommentUseCases {
     // Usecase: lay danh sach comment cua 1 user
     async find(userId: string) {
         // Check existing user
-        const existingEmail = await this.userRepository.getById(userId);
+        const existingUser = await this.userRepository.getById(userId);
 
         // Log error
-        if (!existingEmail) {
+        if (!existingUser) {
             this.logger.error("Cannot found user", undefined, "At create comment usecase");
             throw new NotFoundException("Cannot found user to create comment");
         }

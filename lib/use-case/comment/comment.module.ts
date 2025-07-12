@@ -6,6 +6,7 @@ import { CommentController } from "lib/interface/controllers/comment.controller"
 @Module({
     imports: [InfrastructureModule],
     providers: [CommentUseCases],
+    controllers: [CommentController],
     exports: [CommentUseCases]
 })
 export class CommentModule { }

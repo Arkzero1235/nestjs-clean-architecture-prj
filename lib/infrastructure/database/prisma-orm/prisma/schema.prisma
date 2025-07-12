@@ -60,7 +60,7 @@ model Order {
   id        String   @id @default(uuid())
   userId    String
   adminId   String?
-  total     Float
+  total     Float 
   status    String
   createdAt DateTime @default(now())
 
@@ -89,7 +89,7 @@ model Product {
   price      Float
   image      String
   stock      Int
-  views      Int
+  storage    Int
   categoryId String
   createdAt  DateTime @default(now())
 

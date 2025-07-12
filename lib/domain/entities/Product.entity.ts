@@ -6,7 +6,7 @@ export class Product {
     private price: number;
     private image: string;
     private stock: number;
-    private views: number;
+    private storage: number;
 
     getId(): string {
         return this.id;
@@ -28,8 +28,8 @@ export class Product {
         return this.stock;
     }
 
-    getViews(): number {
-        return this.views;
+    getStorage(): number {
+        return this.storage;
     }
 
     static Create(data: CreateProductDto) {

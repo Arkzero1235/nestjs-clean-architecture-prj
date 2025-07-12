@@ -18,6 +18,8 @@ import { CategoryRepository } from "lib/domain/repositories/CategoryRepository";
 import { CategoryRepositoryImpl } from "./entities-repository-implement/CategoryRepositoryImpl";
 import { CommentRepository } from "lib/domain/repositories/CommentRepository";
 import { CommentRepositoryImpl } from "./entities-repository-implement/CommentRepositoryImpl";
+import { OrderRepository } from "lib/domain/repositories/OrderRepository";
+import { OrderRepositoryImpl } from "./entities-repository-implement/OrderRepositoryImpl";
 @Module({
     imports: [
         JwtModule.registerAsync({
@@ -62,6 +64,10 @@ import { CommentRepositoryImpl } from "./entities-repository-implement/CommentRe
         {
             provide: CommentRepository,
             useClass: CommentRepositoryImpl
+        },
+        {
+            provide: OrderRepository,
+            useClass: OrderRepositoryImpl
         }
     ],
     exports: [
@@ -74,7 +80,8 @@ import { CommentRepositoryImpl } from "./entities-repository-implement/CommentRe
         AuthRepository,
         AdminRepository,
         CategoryRepository,
-        CommentRepository
+        CommentRepository,
+        OrderRepository
     ],
 })
 export class InfrastructureModule { }

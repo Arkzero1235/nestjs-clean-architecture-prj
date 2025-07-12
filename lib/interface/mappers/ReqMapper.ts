@@ -15,6 +15,11 @@ import { CreateCommentReqDto } from "../dtos/comment/CreateCommentReqDto";
 import { CreateCommentDto } from "lib/domain/dtos/comment/CreateCommentDto";
 import { UpdateCommentReqDto } from "../dtos/comment/UpdateCommentReqDto";
 import { UpdateCommentDto } from "lib/domain/dtos/comment/UpdateCommentDto";
+import { CreateOrderReqDto } from "../dtos/order/CreateOrderReqDto";
+import { CreateOrderDto } from "lib/domain/dtos/order/CreateOrderDto";
+import { OrderStatusMapper } from "./OrderStatusMapper";
+import { UpdateOrderReqDto } from "../dtos/order/UpdateOrderReqDto";
+import { UpdateOrderDto } from "lib/domain/dtos/order/UpdateOrderDto";
 
 export class ReqMapper {
     static LoginMapper(LoginReqDto: LoginReqDto): LoginDto {
@@ -75,6 +80,21 @@ export class ReqMapper {
     static UpdateCommentMapper(UpdateCommentReqDto: UpdateCommentReqDto): UpdateCommentDto {
         return {
             content: UpdateCommentReqDto.content
+        }
+    }
+
+    static CreateOrderMapper(createOrderReqDto: CreateOrderReqDto): CreateOrderDto {
+        return {
+            userId: createOrderReqDto.userId,
+            status: OrderStatusMapper.map(createOrderReqDto.status)
+        }
+    }
+
+    static UpdateOrderMapper(updateOrderReqDto: UpdateOrderReqDto): UpdateOrderDto {
+        return {
+            userId: updateOrderReqDto.userId,
+            id: updateOrderReqDto.id,
+            status: OrderStatusMapper.map(updateOrderReqDto.status)
         }
     }
 }
