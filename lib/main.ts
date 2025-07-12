@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
 import * as cookieParser from 'cookie-parser';
 import { ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 dotenv.config();
 
 async function bootstrap() {
@@ -17,6 +18,19 @@ async function bootstrap() {
   );
 
   app.use(cookieParser());
+
+  app.enableCors();
+
+  const config = new DocumentBuilder()
+    .setTitle('Website bán hàng tiện lợi')
+    .setDescription('Các API cho website bán hàng tiện lợi')
+    .setVersion('1.0.0')
+    .addServer('http://localhost:3333/api/v1')
+    .addBearerAuth()
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/v1/docs', app, document);
 
   app.setGlobalPrefix('api/v1');
 

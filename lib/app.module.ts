@@ -10,6 +10,7 @@ import { AdminModule } from './use-case/admin/admin.module';
 import { CategoryModule } from './use-case/category/category.module';
 import { CommentModule } from './use-case/comment/comment.module';
 import { OrderModule } from './use-case/order/order.module';
+import { AuthController } from './interface/controllers/auth.controller';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { OrderModule } from './use-case/order/order.module';
     CommentModule,
     OrderModule
   ],
-  controllers: [AppController],
+  controllers: [AppController, AuthController],
   providers: [
     AppService,
     {

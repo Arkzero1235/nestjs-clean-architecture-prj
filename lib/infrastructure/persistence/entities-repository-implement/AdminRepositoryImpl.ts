@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, InternalServerErrorException, Logger, NotFoundException } from "@nestjs/common";
 import { CreateAdminDto } from "lib/domain/dtos/admin/CreateAdminDto";
-import { ResponseAdminDto } from "lib/domain/dtos/admin/ResponseAdminDto";
+import { ResponseAdminDto } from "lib/domain/dtos/admin/ResponseAdminDto copy";
 import { UpdateAdminDto } from "lib/domain/dtos/admin/UpdateAdminDto";
 import { AdminRepository } from "lib/domain/repositories/AdminRepository";
 import { IPasswordHasher } from "lib/domain/services/IPasswordHasher";
@@ -12,7 +12,6 @@ export class AdminRepositoryImpl implements AdminRepository {
     constructor(
         private readonly prismaService: PrismaService,
         private readonly iPasswordHasher: IPasswordHasher,
-        private readonly logger: Logger
     ) { }
 
     async getById(id: string): Promise<object | null> {

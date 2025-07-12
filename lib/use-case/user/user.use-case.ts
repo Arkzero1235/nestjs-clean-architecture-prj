@@ -1,6 +1,6 @@
 import { BadRequestException, ConflictException, Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { CreateUserDto } from "lib/domain/dtos/user/CreateUserDto";
-import { UpdateUserDto } from "lib/domain/dtos/user/UpdateUserDto";
+import { UpdateUserReqDto } from "lib/interface/dtos/user/UpdateUserReqDto";
 import { isUUID } from "class-validator";
 import { User } from "lib/domain/entities/User.entity";
 import { UserRepository } from "lib/domain/repositories/UserRepository";
@@ -74,7 +74,7 @@ export class UserUseCases {
         return this.userRepository.getByEmail(email);
     }
 
-    async updateUser(id: string, updateUserDto: UpdateUserDto): Promise<object> {
+    async updateUser(id: string, updateUserDto: UpdateUserReqDto): Promise<object> {
 
         if (!id) {
             throw new BadRequestException("ID is undefined")

@@ -3,7 +3,7 @@ import { UserRepository } from "lib/domain/repositories/UserRepository";
 import { PrismaService } from "../../database/prisma-orm/prisma.service";
 import { IPasswordHasher } from "lib/domain/services/IPasswordHasher";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { UpdateUserDto } from "lib/domain/dtos/user/UpdateUserDto";
+import { UpdateUserReqDto } from "lib/interface/dtos/user/UpdateUserReqDto";
 import { ResponseUserDto } from "lib/domain/dtos/user/ResponseUserDto";
 import { CreateUserDto } from "lib/domain/dtos/user/CreateUserDto";
 import { ResMapper } from "lib/interface/mappers/ResMapper";
@@ -50,7 +50,7 @@ export class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    async merge(id: string, updateUserDto: UpdateUserDto): Promise<object> {
+    async merge(id: string, updateUserDto: UpdateUserReqDto): Promise<object> {
         try {
             const data: any = {
                 ...(updateUserDto.username && { username: updateUserDto.username }),

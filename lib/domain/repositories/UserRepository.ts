@@ -1,12 +1,12 @@
 import { CreateUserDto } from "../dtos/user/CreateUserDto";
 import { ResponseUserDto } from "../dtos/user/ResponseUserDto";
-import { UpdateUserDto } from "../dtos/user/UpdateUserDto";
+import { UpdateUserReqDto } from "../../interface/dtos/user/UpdateUserReqDto";
 
 export abstract class UserRepository {
 
     abstract persist(createUserDto: CreateUserDto): Promise<object>;
 
-    abstract merge(id: string, updateUser: UpdateUserDto): Promise<object>;
+    abstract merge(id: string, updateUser: UpdateUserReqDto): Promise<object>;
 
     abstract remove(id: string): Promise<object>;
 

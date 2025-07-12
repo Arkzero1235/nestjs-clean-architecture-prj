@@ -1,5 +1,5 @@
 import { CreateAdminDto } from "../dtos/admin/CreateAdminDto";
-import { ResponseAdminDto } from "../dtos/admin/ResponseAdminDto";
+import { ResponseAdminDto } from "../dtos/admin/ResponseAdminDto copy";
 import { UpdateAdminDto } from "../dtos/admin/UpdateAdminDto";
 
 export abstract class AdminRepository {
