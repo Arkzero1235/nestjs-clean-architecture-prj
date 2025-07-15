@@ -12,7 +12,7 @@ export class UserUseCases {
         private readonly logger: Logger
     ) { }
 
-    async createUser(createUserDto: CreateUserDto): Promise<object> {
+    async createUser(createUserDto: CreateUserDto) {
 
         // check value  
         if (!createUserDto.email) {
@@ -74,7 +74,7 @@ export class UserUseCases {
         return this.userRepository.getByEmail(email);
     }
 
-    async updateUser(id: string, updateUserDto: UpdateUserReqDto): Promise<object> {
+    async updateUser(id: string, updateUserDto: UpdateUserReqDto) {
 
         if (!id) {
             throw new BadRequestException("ID is undefined")
@@ -89,7 +89,7 @@ export class UserUseCases {
         return this.userRepository.merge(id, updateUserDto);
     }
 
-    removeUser(id: string): Promise<object> {
+    removeUser(id: string) {
 
         if (!id) {
             throw new BadRequestException("ID is not defined.");

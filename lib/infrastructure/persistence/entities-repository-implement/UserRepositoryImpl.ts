@@ -4,9 +4,9 @@ import { PrismaService } from "../../database/prisma-orm/prisma.service";
 import { IPasswordHasher } from "lib/domain/services/IPasswordHasher";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { UpdateUserReqDto } from "lib/interface/dtos/user/UpdateUserReqDto";
-import { ResponseUserDto } from "lib/domain/dtos/user/ResponseUserDto";
 import { CreateUserDto } from "lib/domain/dtos/user/CreateUserDto";
 import { ResMapper } from "lib/interface/mappers/ResMapper";
+import { UserDto } from "lib/domain/dtos/user/ResDto";
 
 @Injectable()
 export class UserRepositoryImpl implements UserRepository {
@@ -15,7 +15,7 @@ export class UserRepositoryImpl implements UserRepository {
         private iPasswordHasher: IPasswordHasher
     ) { }
 
-    async persist(user: CreateUserDto): Promise<object> {
+    async persist(user: CreateUserDto): Promise<UserDto | null> {
         try {
             const passwordHash = await this.iPasswordHasher.hash(user.password)
 
@@ -30,7 +30,7 @@ export class UserRepositoryImpl implements UserRepository {
                 }
             })
 
-            return ResMapper.mapCreatedUserData(create_result);
+            return ResMapper.mapResponseUserDto(create_result);
 
         } catch (error) {
             if (
@@ -50,7 +50,7 @@ export class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    async merge(id: string, updateUserDto: UpdateUserReqDto): Promise<object> {
+    async merge(id: string, updateUserDto: UpdateUserReqDto): Promise<UserDto | null> {
         try {
             const data: any = {
                 ...(updateUserDto.username && { username: updateUserDto.username }),
@@ -69,14 +69,14 @@ export class UserRepositoryImpl implements UserRepository {
                 throw new BadRequestException("Update error")
             }
 
-            return ResMapper.mapResData(updated_result);
+            return ResMapper.mapResponseUserDto(updated_result);
 
         } catch (error) {
             throw new InternalServerErrorException('Unexpected error occurred');
         }
     }
 
-    async remove(id: string): Promise<object> {
+    async remove(id: string): Promise<UserDto | null> {
         try {
             const remove_result = await this.prismaService.user.delete({
                 where: {
@@ -84,7 +84,7 @@ export class UserRepositoryImpl implements UserRepository {
                 }
             })
 
-            return ResMapper.mapResData(remove_result);
+            return ResMapper.mapResponseUserDto(remove_result);
 
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError && error.code === 'P2025') {
@@ -95,7 +95,7 @@ export class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    async getById(id: string): Promise<object | null> {
+    async getById(id: string): Promise<UserDto | null> {
         try {
             const get_by_id_result = await this.prismaService.user.findFirst({
                 where: {
@@ -107,7 +107,7 @@ export class UserRepositoryImpl implements UserRepository {
                 return null
             }
 
-            return ResMapper.mapResData(get_by_id_result);
+            return ResMapper.mapResponseUserDto(get_by_id_result);
 
         } catch (error) {
 
@@ -123,7 +123,7 @@ export class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    async getByEmail(email: string): Promise<object | null> {
+    async getByEmail(email: string): Promise<UserDto | null> {
         try {
             if (!email) {
                 throw new Error('Email is required');
@@ -149,14 +149,14 @@ export class UserRepositoryImpl implements UserRepository {
 
             }
 
-            return ResMapper.mapResData(get_by_email_result);
+            return ResMapper.mapResponseUserDto(get_by_email_result);
 
         } catch (error) {
             throw new InternalServerErrorException('Unexpected error occurred');
         }
     }
 
-    async checkEmail(email: string): Promise<ResponseUserDto | null> {
+    async checkEmail(email: string): Promise<UserDto | null> {
         try {
             if (!email) {
                 throw new Error('Email is required');
@@ -172,7 +172,7 @@ export class UserRepositoryImpl implements UserRepository {
                 return null
             }
 
-            return ResMapper.mapResponseUserDto(check_email_result) ?? null
+            return ResMapper.mapResponseUserDto(check_email_result)
 
         } catch (error) {
             console.error('❌ checkEmail ERROR:', error);
@@ -180,7 +180,7 @@ export class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    async find(): Promise<object> {
+    async find(): Promise<UserDto | null> {
         try {
             const get_all_users_result = await this.prismaService.user.findMany();
 
@@ -188,7 +188,7 @@ export class UserRepositoryImpl implements UserRepository {
                 throw new NotFoundException("There is no user")
             }
 
-            return ResMapper.mapResData(get_all_users_result);
+            return ResMapper.mapResponseUserDto(get_all_users_result);
 
         } catch (error) {
             if (error instanceof NotFoundException) {

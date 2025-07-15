@@ -1,4 +1,5 @@
 import { Injectable, InternalServerErrorException, Logger } from "@nestjs/common";
+import { CategoryDto } from "lib/domain/dtos/category/ResDto";
 import { CreateCategoryDto } from "lib/domain/dtos/category/CreateCategoryDto";
 import { UpdateCategoryDto } from "lib/domain/dtos/category/UpdateCateGoryDto";
 import { CategoryRepository } from "lib/domain/repositories/CategoryRepository";
@@ -12,7 +13,7 @@ export class CategoryRepositoryImpl implements CategoryRepository {
         private readonly logger: Logger
     ) { }
 
-    async persist(createCategoryDto: CreateCategoryDto): Promise<object | null> {
+    async persist(createCategoryDto: CreateCategoryDto): Promise<CategoryDto | null> {
         try {
             // Create new category
             const create_category_result = await this.prismaService.category.create({
@@ -28,7 +29,7 @@ export class CategoryRepositoryImpl implements CategoryRepository {
         }
     }
 
-    async merge(id: string, updateCategoryDto: UpdateCategoryDto): Promise<object | null> {
+    async merge(id: string, updateCategoryDto: UpdateCategoryDto): Promise<CategoryDto | null> {
         try {
             if (!updateCategoryDto.name) {
                 return null;
@@ -53,7 +54,7 @@ export class CategoryRepositoryImpl implements CategoryRepository {
         }
     }
 
-    async remove(id: string): Promise<object | null> {
+    async remove(id: string): Promise<CategoryDto | null> {
         try {
             // Delete category (WARNING: All product datas will be lost)
             const delete_category_result = await this.prismaService.category.delete({
@@ -69,7 +70,7 @@ export class CategoryRepositoryImpl implements CategoryRepository {
         }
     }
 
-    async find(): Promise<object | null> {
+    async find(): Promise<CategoryDto[] | null> {
         try {
             // Get all categories
             const get_all_categories_result = await this.prismaService.category.findMany();
@@ -81,14 +82,14 @@ export class CategoryRepositoryImpl implements CategoryRepository {
                 return null;
             }
 
-            return ResMapper.mapResponseCategoryDto(get_all_categories_result);
+            return ResMapper.mapResponseCategoryDtoList(get_all_categories_result);
 
         } catch (error) {
             throw new InternalServerErrorException("Server error");
         }
     }
 
-    async getByName(name: string): Promise<object | null> {
+    async getByName(name: string): Promise<CategoryDto | null> {
         try {
             // Get all categories
             const get_categories_by_id_result = await this.prismaService.category.findFirst({
@@ -107,7 +108,7 @@ export class CategoryRepositoryImpl implements CategoryRepository {
         }
     }
 
-    async getById(id: string | undefined): Promise<object | null> {
+    async getById(id: string | undefined): Promise<CategoryDto | null> {
         try {
             // Get all categories
             const get_categories_by_id_result = await this.prismaService.category.findFirst({

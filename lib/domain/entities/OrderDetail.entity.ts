@@ -2,6 +2,8 @@ import { CreateOrderDetailDto } from "../dtos/order-detail/CreateOrderDetailDto"
 
 export class OrderDetail {
     private id: string;
+    private orderId: string;
+    private productId: string;
     private quantity: number;
     private price: number;
     private status: string;

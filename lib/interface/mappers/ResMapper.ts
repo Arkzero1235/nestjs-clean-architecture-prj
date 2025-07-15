@@ -1,9 +1,9 @@
-import { ResponseUserDto } from "lib/domain/dtos/user/ResponseUserDto";
-import { ResUserDto } from "../dtos/user/ResUserDto";
-import { ResponseAdminDto } from "lib/domain/dtos/admin/ResponseAdminDto copy";
-import { ResponseCategoryDto } from "lib/domain/dtos/category/ResponseCategory";
-import { ResponseCommentDto } from "lib/domain/dtos/comment/ResponseCommentDto";
-import { ResponseOrderDto } from "lib/domain/dtos/order/ResponseOrderDto";
+import { AdminResDto } from "../dtos/admin/AminResDto";
+import { CategoryResDto } from "../dtos/category/CategoryResDto";
+import { CommentResDto } from "../dtos/comment/CommentResDto";
+import { OrderResDto } from "../dtos/order/OrderResDto";
+import { UserResDto } from "../dtos/user/UserResDto";
+
 
 export class ResMapper {
 
@@ -11,27 +11,21 @@ export class ResMapper {
         return ormData;
     }
 
-    static mapCreatedUserData(ormData: any): ResUserDto {
+    static mapResponseUserDto(ormData: any): UserResDto | null {
         return {
             id: ormData.id,
             username: ormData.userName,
             email: ormData.email,
-            role: ormData.role
-        }
-    }
-
-    static mapResponseUserDto(ormData: any): ResponseUserDto {
-        return {
-            id: ormData.id,
-            userName: ormData.userName,
-            email: ormData.email,
-            passwordHash: ormData.passwordHash,
             address: ormData.address,
-            role: ormData.role
+            phone: ormData.phone,
+            role: ormData.role,
+            password: ormData.passwordHash,
+            createdAt: ormData.createdAt,
+            updatedAt: ormData.updatedAt
         }
     }
 
-    static mapResponseAdminDto(ormData: any): ResponseAdminDto {
+    static mapResponseAdminDto(ormData: any): AdminResDto | null {
         return {
             id: ormData.id,
             email: ormData.email,
@@ -41,48 +35,57 @@ export class ResMapper {
         }
     }
 
-    static mapResponseCategoryDto(ormData: any | any[]): ResponseCategoryDto | ResponseCategoryDto[] {
-
-        if (Array.isArray(ormData)) {
-            return ormData.map(category => ({
-                name: category.name
-            }))
-        }
-
+    static mapResponseCategoryDto(ormData: any): CategoryResDto | null {
         return {
-            name: ormData.name
+            id: ormData.id,
+            name: ormData.name,
+            createdAt: ormData.createdAt,
+            updatedAt: ormData.updatedAt
         }
     }
 
-    static mapResponseCommentDto(ormData: any | any[]): ResponseCommentDto | ResponseCommentDto[] {
-        if (Array.isArray(ormData)) {
-            return ormData.map(comment => ({
-                content: comment.content
-            }))
-        }
+    static mapResponseCategoryDtoList(ormData: any[]): CategoryResDto[] | null {
+        return ormData.map(category => ({
+            id: category.id,
+            name: category.name,
+            createdAt: category.createdAt,
+            updatedAt: category.updatedAt
+        }))
+    }
 
+    static mapResponseCommentDto(ormData: any): CommentResDto | null {
         return {
+            id: ormData.id,
             content: ormData.content
         }
     }
 
-    static mapResponseOrderDto(ormData: any | any[]): ResponseOrderDto | ResponseOrderDto[] {
-        if (Array.isArray(ormData)) {
-            return ormData.map(order => ({
-                id: order.id,
-                userId: order.userId,
-                status: order.status,
-                total: order.total
-            }))
-        }
+    static mapResponseCommentDtoList(ormData: any[]): CommentResDto[] | null {
+        return ormData.map(comment => ({
+            id: comment.id,
+            content: comment.content
+        }))
+    }
 
+    static mapResponseOrderDto(ormData: any): OrderResDto | null {
         return {
             id: ormData.id,
             userId: ormData.userId,
             status: ormData.status,
-            total: ormData.total
+            total: ormData.total,
+            createdAt: ormData.createdAt,
+            updatedAt: ormData.updatedAt
         }
     }
 
+    static mapResponseOrderDtoList(ormData: any[]): OrderResDto[] | null {
+        return ormData.map(order => ({
+            id: order.id,
+            userId: order.userId,
+            total: order.total,
+            status: order.status,
+            createdAt: order.createdAt,
+            updatedAt: order.updatedAt
+        }))
+    }
 }
-

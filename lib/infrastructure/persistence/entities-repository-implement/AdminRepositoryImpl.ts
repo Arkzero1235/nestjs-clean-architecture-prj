@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, InternalServerErrorException, Logger, NotFoundException } from "@nestjs/common";
 import { CreateAdminDto } from "lib/domain/dtos/admin/CreateAdminDto";
-import { ResponseAdminDto } from "lib/domain/dtos/admin/ResponseAdminDto copy";
+import { AdminDto } from "lib/domain/dtos/admin/ResDto";
 import { UpdateAdminDto } from "lib/domain/dtos/admin/UpdateAdminDto";
 import { AdminRepository } from "lib/domain/repositories/AdminRepository";
 import { IPasswordHasher } from "lib/domain/services/IPasswordHasher";
@@ -14,7 +14,7 @@ export class AdminRepositoryImpl implements AdminRepository {
         private readonly iPasswordHasher: IPasswordHasher,
     ) { }
 
-    async getById(id: string): Promise<object | null> {
+    async getById(id: string): Promise<AdminDto | null> {
         try {
             // Get admin by id
             const get_admin_by_id_result = await this.prismaService.admin.findFirst({
@@ -33,7 +33,7 @@ export class AdminRepositoryImpl implements AdminRepository {
         }
     }
 
-    async checkMail(email: string): Promise<ResponseAdminDto | null> {
+    async checkMail(email: string): Promise<AdminDto | null> {
         try {
 
             // Check admin by email
@@ -54,7 +54,7 @@ export class AdminRepositoryImpl implements AdminRepository {
         }
     }
 
-    async persist(createAdminDto: CreateAdminDto): Promise<object | null> {
+    async persist(createAdminDto: CreateAdminDto): Promise<AdminDto | null> {
         try {
 
             // Hash password
@@ -77,7 +77,7 @@ export class AdminRepositoryImpl implements AdminRepository {
         }
     }
 
-    async merge(id: string, updateAdminDto: UpdateAdminDto): Promise<object | null> {
+    async merge(id: string, updateAdminDto: UpdateAdminDto): Promise<AdminDto | null> {
         try {
             // Filter undefined or null data
             const data: any = {
@@ -108,7 +108,7 @@ export class AdminRepositoryImpl implements AdminRepository {
         }
     }
 
-    async remove(id: string): Promise<object | null> {
+    async remove(id: string): Promise<AdminDto | null> {
         try {
             // Delete admin
             const delete_admin_result = await this.prismaService.admin.delete({

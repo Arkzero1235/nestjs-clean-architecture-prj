@@ -12,7 +12,7 @@ export class CategoryUseCases {
     ) { }
 
     // Usecase: them danh muc
-    async create(createCategoryDto: CreateCategoryDto): Promise<object | null> {
+    async create(createCategoryDto: CreateCategoryDto) {
         // Check exist category
         const existingCategory = await this.categoryRepository.getByName(createCategoryDto.name);
 
@@ -37,7 +37,7 @@ export class CategoryUseCases {
     }
 
     // Usecase: sua danh muc
-    async update(id: string, updateCategoryDto: UpdateCategoryDto): Promise<object | null> {
+    async update(id: string, updateCategoryDto: UpdateCategoryDto) {
         // Check exist category
         const existingCategory = await this.categoryRepository.getByName(updateCategoryDto.name);
 
@@ -57,7 +57,7 @@ export class CategoryUseCases {
     }
 
     // Usecase: xoa danh muc
-    async remove(id: string): Promise<object | null> {
+    async remove(id: string) {
         // Check exist category
         const existingCategory = await this.categoryRepository.getById(id);
 
@@ -77,7 +77,7 @@ export class CategoryUseCases {
     }
 
     // Usecase: lay tat ca danh muc
-    async find(): Promise<object | null> {
+    async find() {
         // Find all categories
         const foundResult = await this.categoryRepository.find();
 

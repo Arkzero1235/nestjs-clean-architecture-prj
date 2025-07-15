@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { Inject, Injectable, Logger, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { LoginDto } from "lib/domain/dtos/user/LoginDto";
 import { AuthRepository } from "lib/domain/repositories/AuthRepository";
 import { UserRepository } from "lib/domain/repositories/UserRepository";
@@ -9,33 +9,45 @@ export class AuthUseCase {
     constructor(
         private authRepository: AuthRepository,
         private userRepository: UserRepository,
-        private iTokenService: ITokenService
+        private iTokenService: ITokenService,
+        private readonly logger: Logger
     ) { }
 
     // Usecase: Đăng nhập
     async login(loginDto: LoginDto) {
-
+        // Check existing user
         const user = await this.userRepository.checkEmail(loginDto.email);
 
+        // Log error
         if (!user) {
-            throw new NotFoundException("Account is not found")
+            this.logger.error("Cannot found user", undefined, "At login usecase");
+            throw new NotFoundException("Account is not found");
         }
 
-        const isValid: boolean = await this.authRepository.validatePassword(loginDto.password, user.passwordHash);
+        // Validate password
+        const isValid: boolean = await this.authRepository.validatePassword(loginDto.password, user.password);
 
         if (!isValid) {
+            this.logger.error("Password is not correct", undefined, "At login usecase");
             throw new UnauthorizedException("Invalid credentials");
         }
 
+        // Init payload for token
         const payload = {
             id: user.id,
-            username: user.userName,
+            username: user.username,
             role: user.role
         }
 
+        // Create token
         const accessToken = this.iTokenService.generateAccessToken(payload);
 
         const refreshToken = this.iTokenService.generateRefreshToken(payload);
+
+        // Log result
+        if (accessToken && refreshToken && isValid) {
+            this.logger.log("Login success", "At login usecase");
+        }
 
         return { id: user.id, accessToken, refreshToken }
     }

@@ -1,5 +1,6 @@
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { CreateOrderDto } from "lib/domain/dtos/order/CreateOrderDto";
+import { OrderDto } from "lib/domain/dtos/order/ResDto";
 import { UpdateOrderDto } from "lib/domain/dtos/order/UpdateOrderDto";
 import { OrderRepository } from "lib/domain/repositories/OrderRepository";
 import { PrismaService } from "lib/infrastructure/database/prisma-orm/prisma.service";
@@ -9,7 +10,7 @@ import { ResMapper } from "lib/interface/mappers/ResMapper";
 export class OrderRepositoryImpl implements OrderRepository {
     constructor(private readonly prismaService: PrismaService) { }
 
-    async persist(createOrderDto: CreateOrderDto): Promise<object | null> {
+    async persist(createOrderDto: CreateOrderDto): Promise<OrderDto | null> {
         try {
             const create_order_result = await this.prismaService.order.create({
                 data: {
@@ -26,7 +27,7 @@ export class OrderRepositoryImpl implements OrderRepository {
         }
     }
 
-    async merge(updateOrderDto: UpdateOrderDto): Promise<object | null> {
+    async merge(updateOrderDto: UpdateOrderDto): Promise<OrderDto | null> {
         try {
             const update_order_result = await this.prismaService.order.update({
                 where: {
@@ -44,7 +45,7 @@ export class OrderRepositoryImpl implements OrderRepository {
         }
     }
 
-    async remove(id: string): Promise<object | null> {
+    async remove(id: string): Promise<OrderDto | null> {
         try {
             const delete_order_result = await this.prismaService.order.delete({
                 where: {
@@ -59,7 +60,7 @@ export class OrderRepositoryImpl implements OrderRepository {
         }
     }
 
-    async find(userId: string): Promise<object | null> {
+    async find(userId: string): Promise<OrderDto | null> {
         try {
             const all_order_result = await this.prismaService.order.findMany({
                 where: {
@@ -77,7 +78,7 @@ export class OrderRepositoryImpl implements OrderRepository {
         }
     }
 
-    async getById(id: string): Promise<object | null> {
+    async getById(id: string): Promise<OrderDto | null> {
         try {
             const get_order_by_id_result = await this.prismaService.order.findUnique({
                 where: {

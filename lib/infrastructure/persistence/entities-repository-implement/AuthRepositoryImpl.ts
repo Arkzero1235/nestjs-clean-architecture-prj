@@ -25,6 +25,7 @@ export class AuthRepositoryImpl implements AuthRepository {
             }
 
             throw new InternalServerErrorException('Unexpected error occurred');
+
         }
     }
 

@@ -14,7 +14,7 @@ export class CommentUseCases {
     ) { }
 
     // Usecase: tao mot comment
-    async create(createCommentDto: CreateCommentDto): Promise<object | null> {
+    async create(createCommentDto: CreateCommentDto) {
         // Validate data
 
         // Check existing user
@@ -42,7 +42,7 @@ export class CommentUseCases {
     }
 
     // Usecase: cap nhat comment
-    async update(id: string, updateCommentDto: UpdateCommentDto): Promise<object | null> {
+    async update(id: string, updateCommentDto: UpdateCommentDto) {
         // Validate data
 
         // Check existing comment
@@ -64,7 +64,7 @@ export class CommentUseCases {
     }
 
     // Usecase: xoa comment
-    async remove(id: string): Promise<object | undefined> {
+    async remove(id: string) {
         // Check existing comment
         const existingComment = await this.commentRepository.getById(id);
 
