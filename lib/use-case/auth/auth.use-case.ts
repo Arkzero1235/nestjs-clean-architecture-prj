@@ -5,7 +5,7 @@ import { UserRepository } from "lib/domain/repositories/UserRepository";
 import { ITokenService } from "lib/domain/services/ITokenService";
 
 @Injectable()
-export class AuthUseCase {
+export class AuthUseCases {
     constructor(
         private authRepository: AuthRepository,
         private userRepository: UserRepository,
@@ -46,7 +46,7 @@ export class AuthUseCase {
 
         // Log result
         if (accessToken && refreshToken && isValid) {
-            this.logger.log("Login success", "At login usecase");
+            this.logger.log("Login success", "At auth usecases");
         }
 
         return { id: user.id, accessToken, refreshToken }
@@ -54,12 +54,21 @@ export class AuthUseCase {
 
     // Usecase: Đăng xuất
     async logout() {
+        this.logger.log("Logout success", "At auth usecases")
         return "Logout successed"
     }
 
     // Usecase: Cấp lại access token
     async refresh(token: string): Promise<string> {
+        if (!token) {
+            this.logger.error("Missing refresh token | user haven't logined yet", undefined, "At auth usecases");
+            throw new UnauthorizedException("Missing refresh token | user haven't logined yet");
+        }
+
         const payload = this.iTokenService.verifyRefreshToken(token);
+
+        this.logger.log("Renew token success", "At auth usecases")
+
         return this.iTokenService.generateAccessToken({ payload });
     }
 }

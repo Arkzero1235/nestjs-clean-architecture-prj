@@ -5,6 +5,8 @@ import { ReqMapper } from "../mappers/ReqMapper";
 import { ApiResponseHelper } from "../helper/response-helper";
 import { UpdateAdminReqDto } from "../dtos/admin/UpdateAdminReqDto";
 import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { CreateAdminDto } from "lib/domain/dtos/admin/CreateAdminDto";
+import { AdminResDto } from "../dtos/admin/AdminResDto";
 
 @Injectable()
 @Controller("/admin")
@@ -15,32 +17,15 @@ export class AdminController {
     ) { }
 
     @Post()
-    @ApiOperation({ summary: "Tạo tài khoản admin" })
+    @ApiOperation({
+        summary: "Tạo 1 tài khoản admin"
+    })
     @ApiBody({
-        description: 'Thông tin để tạo admin',
-        required: true,
-        schema: {
-            type: 'object',
-            properties: {
-                name: { type: 'string', example: 'Nguyen Van A' },
-                email: { type: 'string', example: 'admin@example.com' },
-                password: { type: 'string', example: '123456' },
-                phone: { type: 'string', example: '0123456789' },
-            },
-            required: ['name', 'email', 'password', 'phone'],
-        }
+        type: CreateAdminReqDto
     })
     @ApiCreatedResponse({
-        description: 'Thông tin admin được tạo',
-        schema: {
-            example: {
-                id: 'abc123',
-                name: 'Nguyen Van A',
-                email: 'admin@example.com',
-                password: 'hashed_password',
-                phone: '0123456789',
-            }
-        }
+        description: "Create admin success",
+        type: AdminResDto
     })
     async create(@Body() createAdminReqDto: CreateAdminReqDto) {
         this.logger.log("Create admin request received", "At admin controller");
@@ -53,33 +38,17 @@ export class AdminController {
         )
     }
 
-    @ApiOperation({ summary: "Cập nhật thông tin admin theo ID" })
+    @Patch("/:id")
+    @ApiOperation({
+        summary: "Cập nhật 1 tài khoản admin"
+    })
     @ApiBody({
-        description: 'Thông tin admin cần cập nhật',
-        required: true,
-        schema: {
-            type: 'object',
-            properties: {
-                name: { type: 'string', example: 'Nguyen Van B' },
-                email: { type: 'string', example: 'admin2@example.com' },
-                password: { type: 'string', example: 'newpassword123' },
-                phone: { type: 'string', example: '0987654321' },
-            },
-            required: [],
-        },
+        type: UpdateAdminReqDto
     })
     @ApiOkResponse({
-        description: 'Cập nhật admin thành công',
-        schema: {
-            example: {
-                id: 'a1b2c3d4',
-                name: 'Nguyen Van B',
-                email: 'admin2@example.com',
-                phone: '0987654321',
-            },
-        },
+        description: "Update admin success",
+        type: AdminResDto
     })
-    @Patch("/:id")
     async Update(@Body() updateAdminReqDto: UpdateAdminReqDto, @Param("id") id: string) {
         this.logger.log("Update admin request received", "At admin controller");
         const mappedData = ReqMapper.UpdateAdminMapper(updateAdminReqDto);
@@ -92,21 +61,12 @@ export class AdminController {
     }
 
     @Delete("/:id")
-    @ApiOperation({ summary: 'Xoá admin theo ID' })
+    @ApiOperation({
+        summary: "Xóa 1 tài khoản admin"
+    })
     @ApiOkResponse({
-        description: 'Xoá admin thành công',
-        schema: {
-            example: {
-                statusCode: 200,
-                message: 'Delete admin success',
-                data: {
-                    id: 'a1b2c3d4',
-                    name: 'Nguyen Van A',
-                    email: 'admin@example.com',
-                    phone: '0123456789',
-                },
-            },
-        },
+        description: "Delete admin success",
+        type: AdminResDto
     })
     async Remove(@Param("id") id: string) {
         this.logger.log("Delete admin request received", "At admin controller");

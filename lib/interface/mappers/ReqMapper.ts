@@ -1,6 +1,6 @@
 import { LoginDto } from "lib/domain/dtos/user/LoginDto";
 import { LoginReqDto } from "../dtos/LoginReqDto";
-import { CreateReqDto } from "../dtos/user/CreateUserReqDto";
+import { CreateUerReqDto } from "../dtos/user/CreateUserReqDto";
 import { CreateUserDto } from "lib/domain/dtos/user/CreateUserDto";
 import { UserRoleMapper } from "./UserRoleMapper";
 import { CreateAdminReqDto } from "../dtos/admin/CreateAdminReqDto";
@@ -20,6 +20,10 @@ import { CreateOrderDto } from "lib/domain/dtos/order/CreateOrderDto";
 import { OrderStatusMapper } from "./OrderStatusMapper";
 import { UpdateOrderReqDto } from "../dtos/order/UpdateOrderReqDto";
 import { UpdateOrderDto } from "lib/domain/dtos/order/UpdateOrderDto";
+import { CreateOrderDetailReqDto } from "../dtos/order-detail/CreateOrderDetailReqDto";
+import { CreateOrderDetailDto } from "lib/domain/dtos/order-detail/CreateOrderDetailDto";
+import { UpdateOrderDetailReqDto } from "../dtos/order-detail/UpdateOrderDetailReqDto";
+import { UpdateOrderDetailDto } from "lib/domain/dtos/order-detail/UpdateOrderDetailDto";
 
 export class ReqMapper {
     static LoginMapper(LoginReqDto: LoginReqDto): LoginDto {
@@ -29,7 +33,7 @@ export class ReqMapper {
         }
     }
 
-    static CreateUserMapper(createReqDto: CreateReqDto): CreateUserDto {
+    static CreateUserMapper(createReqDto: CreateUerReqDto): CreateUserDto {
         return {
             username: createReqDto.userName,
             email: createReqDto.email,
@@ -95,6 +99,25 @@ export class ReqMapper {
             userId: updateOrderReqDto.userId,
             id: updateOrderReqDto.id,
             status: OrderStatusMapper.map(updateOrderReqDto.status)
+        }
+    }
+
+    static CreateOrderDetailMapper(createOrderDetailReqDto: CreateOrderDetailReqDto): CreateOrderDetailDto {
+        return {
+            orderId: createOrderDetailReqDto.orderId,
+            productId: createOrderDetailReqDto.productId,
+            price: createOrderDetailReqDto.price,
+            quantity: createOrderDetailReqDto.quantity,
+            status: createOrderDetailReqDto.status
+        }
+    }
+
+    static UpdateOrderDetailMapper(updateOrderDetailReqDto: UpdateOrderDetailReqDto): UpdateOrderDetailDto {
+        return {
+            orderId: updateOrderDetailReqDto.orderId,
+            price: updateOrderDetailReqDto.price,
+            quantity: updateOrderDetailReqDto.quantity,
+            status: updateOrderDetailReqDto.status,
         }
     }
 }

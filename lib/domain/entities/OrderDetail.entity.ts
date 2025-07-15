@@ -7,7 +7,6 @@ export class OrderDetail {
     private quantity: number;
     private price: number;
     private status: string;
-    private total: number;
 
     getId(): string {
         return this.id;
@@ -26,7 +25,7 @@ export class OrderDetail {
     }
 
     getTotal(): number {
-        return this.total;
+        return this.price * this.quantity;
     }
 
     static Create(data: CreateOrderDetailDto) {

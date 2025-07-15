@@ -5,7 +5,6 @@ export class UserRoleMapper {
         const toUpperCase = role.toUpperCase();
 
         switch (toUpperCase) {
-            case 'ADMIN': return UserRole.admin;
             case 'CLIENT': return UserRole.client;
             default: throw new Error(`Unknow role :${role}`);
         }

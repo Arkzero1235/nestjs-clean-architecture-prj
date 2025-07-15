@@ -1,6 +1,7 @@
-import { AdminResDto } from "../dtos/admin/AminResDto";
+import { AdminResDto } from "../dtos/admin/AdminResDto";
 import { CategoryResDto } from "../dtos/category/CategoryResDto";
 import { CommentResDto } from "../dtos/comment/CommentResDto";
+import { OrderDetailResDto } from "../dtos/order-detail/OrderDetailResDto";
 import { OrderResDto } from "../dtos/order/OrderResDto";
 import { UserResDto } from "../dtos/user/UserResDto";
 
@@ -25,6 +26,20 @@ export class ResMapper {
         }
     }
 
+    static mapResponseUserDtoList(ormData: any[]): UserResDto[] | null {
+        return ormData.map(user => ({
+            id: user.id,
+            username: user.userName,
+            email: user.email,
+            address: user.address,
+            phone: user.phone,
+            role: user.role,
+            password: user.passwordHash,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt
+        }))
+    }
+
     static mapResponseAdminDto(ormData: any): AdminResDto | null {
         return {
             id: ormData.id,
@@ -39,8 +54,7 @@ export class ResMapper {
         return {
             id: ormData.id,
             name: ormData.name,
-            createdAt: ormData.createdAt,
-            updatedAt: ormData.updatedAt
+            createdAt: ormData.createdAt
         }
     }
 
@@ -48,8 +62,7 @@ export class ResMapper {
         return ormData.map(category => ({
             id: category.id,
             name: category.name,
-            createdAt: category.createdAt,
-            updatedAt: category.updatedAt
+            createdAt: category.createdAt
         }))
     }
 
@@ -86,6 +99,30 @@ export class ResMapper {
             status: order.status,
             createdAt: order.createdAt,
             updatedAt: order.updatedAt
+        }))
+    }
+
+    static mapResponseOrderDetailDto(ormData: any): OrderDetailResDto | null {
+        return {
+            id: ormData.id,
+            orderId: ormData.orderId,
+            productId: ormData.productId,
+            price: ormData.price,
+            quantity: ormData.quantity,
+            status: ormData.status,
+            createdAt: ormData.status
+        }
+    }
+
+    static mapResponseOrderDetailDtoList(ormData: any[]): OrderDetailResDto[] | null {
+        return ormData.map(orderDetail => ({
+            id: orderDetail.id,
+            orderId: orderDetail.orderId,
+            productId: orderDetail.productId,
+            price: orderDetail.price,
+            quantity: orderDetail.quantity,
+            status: orderDetail.status,
+            createdAt: orderDetail.status
         }))
     }
 }

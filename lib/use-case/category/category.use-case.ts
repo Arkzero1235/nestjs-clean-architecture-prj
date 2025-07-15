@@ -39,7 +39,7 @@ export class CategoryUseCases {
     // Usecase: sua danh muc
     async update(id: string, updateCategoryDto: UpdateCategoryDto) {
         // Check exist category
-        const existingCategory = await this.categoryRepository.getByName(updateCategoryDto.name);
+        const existingCategory = await this.categoryRepository.getById(id);
 
         // Log error
         if (!existingCategory) {

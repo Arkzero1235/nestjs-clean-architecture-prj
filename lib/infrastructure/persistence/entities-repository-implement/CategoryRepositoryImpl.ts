@@ -75,9 +75,6 @@ export class CategoryRepositoryImpl implements CategoryRepository {
             // Get all categories
             const get_all_categories_result = await this.prismaService.category.findMany();
 
-            console.log(get_all_categories_result);
-
-
             if (!get_all_categories_result) {
                 return null;
             }

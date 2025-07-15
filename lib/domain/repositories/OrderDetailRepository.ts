@@ -1,10 +1,12 @@
 import { CreateOrderDetailDto } from "../dtos/order-detail/CreateOrderDetailDto";
+import { OrderDetailDto } from "../dtos/order-detail/ResDto";
 import { UpdateOrderDetailDto } from "../dtos/order-detail/UpdateOrderDetailDto";
 
 export abstract class OrderDetailRepository {
-    abstract persist(createOrderDetailDto: CreateOrderDetailDto): Promise<object | null>;
-    abstract merge(updateOrderDetailDto: UpdateOrderDetailDto): Promise<object | null>;
-    abstract remove(id: string): Promise<object | null>;
-    abstract find(): Promise<object | null>;
-    abstract getById(id: string): Promise<object | null>;
+    abstract updateOrderTotal(orderId: string): Promise<void>
+    abstract persist(createOrderDetailDto: CreateOrderDetailDto): Promise<OrderDetailDto | null>;
+    abstract merge(id: string, updateOrderDetailDto: UpdateOrderDetailDto): Promise<OrderDetailDto | null>;
+    abstract remove(id: string): Promise<OrderDetailDto | null>;
+    abstract find(orderId: string): Promise<OrderDetailDto[] | null>;
+    abstract getById(id: string): Promise<OrderDetailDto | null>;
 }

@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Post, Req, Res } from "@nestjs/common";
-import { AuthUseCase } from "lib/use-case/auth/auth.use-case";
+import { Body, Controller, Get, Logger, Post, Req, Res } from "@nestjs/common";
+import { AuthUseCases } from "lib/use-case/auth/auth.use-case";
 import { LoginReqDto } from "../dtos/LoginReqDto";
 import { ReqMapper } from "../mappers/ReqMapper";
 import { ApiResponseHelper } from "../helper/response-helper";
@@ -8,36 +8,37 @@ import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation } from "@nestj
 
 @Controller('/auth')
 export class AuthController {
-    constructor(private authUseCase: AuthUseCase) { }
+    constructor(
+        private authUseCase: AuthUseCases,
+        private readonly logger: Logger
+    ) { }
 
     @Post('/login')
-    @ApiOperation({ summary: 'Đăng nhập' })
+    @ApiOperation({
+        summary: "Đăng nhập tài khoản"
+    })
     @ApiBody({
-        description: 'Thông tin đăng nhập',
-        required: true,
-        schema: {
-            type: 'object',
-            properties: {
-                email: { type: 'string', example: 'user@example.com' },
-                password: { type: 'string', example: '123456' },
-            },
-            required: ['email', 'password'],
-        },
+        type: LoginReqDto
     })
     @ApiCreatedResponse({
-        description: 'Đăng nhập thành công, refresh token được lưu vào cookie',
+        description: "Login success",
         schema: {
-            example: {
-                statusCode: 201,
-                message: 'Login successed',
+            type: "object",
+            properties: {
+                statusCode: { type: 'number', example: 201 },
                 data: {
-                    sub: 'userId123',
-                    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
-                },
-            },
-        },
+                    type: 'object',
+                    properties: {
+                        sub: { type: 'string', example: 'b32c439a-7f7a-4a17-ab16-73342f669260' },
+                        token: { type: 'string', example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6...' }
+                    }
+                }
+            }
+        }
     })
     async login(@Body() loginReqDto: LoginReqDto, @Res({ passthrough: true }) res: Response) {
+        this.logger.log("Login request received", "At auth controller");
+
         const mapLoginData = ReqMapper.LoginMapper(loginReqDto);
 
         const { id, accessToken, refreshToken } = await this.authUseCase.login(mapLoginData);
@@ -59,26 +60,21 @@ export class AuthController {
         )
     }
 
+    @Get('/refresh-token')
     @ApiOperation({
-        summary: 'Làm mới access token từ refresh token (qua cookie)',
-        description:
-            'Yêu cầu phải có cookie tên `re_tkn` chứa refresh token. Trả về access token mới.',
+        summary: "Tạo mới access token"
     })
-    @ApiOkResponse({
-        description: 'Làm mới token thành công',
+    @ApiCreatedResponse({
+        description: "Renew access token success",
         schema: {
-            example: {
-                statusCode: 200,
-                message: 'Renew token success',
-                data: {
-                    accessToken: 'new.jwt.access.token',
-                },
-            },
-        },
+            type: "object",
+            properties: {
+                accessToken: { type: 'string', example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6...' }
+            }
+        }
     })
-    @Get('refresh-token')
     async refreshToken(@Req() req: Request) {
-
+        this.logger.log("Renew token request received", "At auth controller");
         const token = req.cookies['re_tkn'];
         const newAccessToken = await this.authUseCase.refresh(token);
         return ApiResponseHelper.success(
@@ -90,20 +86,18 @@ export class AuthController {
 
     @Post('logout')
     @ApiOperation({
-        summary: 'Đăng xuất',
-        description: 'Xoá refresh token khỏi cookie và huỷ session đăng nhập',
+        summary: "Đăng xuất tài khoản"
     })
     @ApiCreatedResponse({
-        description: 'Đăng xuất thành công',
+        description: "Logout success",
         schema: {
-            example: {
-                statusCode: 201,
-                message: 'Logout success',
-                data: {},
-            },
-        },
+            type: "object",
+            properties: {}
+        }
     })
     async logout(@Res({ passthrough: true }) res: Response) {
+        this.logger.log("Logout request received", "At auth controller");
+
         res.clearCookie('re_tkn');
 
         const message = await this.authUseCase.logout();

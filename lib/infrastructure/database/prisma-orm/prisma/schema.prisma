@@ -46,12 +46,13 @@ model Comment {
   userId    String
   createdAt DateTime @default(now())
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Category {
-  id   String @id @default(uuid())
-  name String
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
 
   products Product[]
 }
@@ -60,12 +61,12 @@ model Order {
   id        String   @id @default(uuid())
   userId    String
   adminId   String?
-  total     Float 
+  total     Float
   status    String
   createdAt DateTime @default(now())
 
-  user    User          @relation(fields: [userId], references: [id])
-  admin   Admin?        @relation(fields: [adminId], references: [id])
+  user    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  admin   Admin?        @relation(fields: [adminId], references: [id], onDelete: Cascade)
   details OrderDetail[]
 }
 
@@ -80,7 +81,7 @@ model OrderDetail {
   createdAt DateTime @default(now())
 
   product Product @relation(fields: [productId], references: [id])
-  order   Order   @relation(fields: [orderId], references: [id])
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
 }
 
 model Product {

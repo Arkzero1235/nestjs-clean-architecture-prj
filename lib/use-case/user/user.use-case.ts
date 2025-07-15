@@ -48,11 +48,11 @@ export class UserUseCases {
         return newUser;
     }
 
-    getAllUser(): Promise<object | null> {
+    getAllUser() {
         return this.userRepository.find();
     }
 
-    getById(id: string): Promise<object | null> {
+    getById(id: string) {
 
         if (!id) {
             throw new BadRequestException("ID is not defined.");
@@ -65,7 +65,7 @@ export class UserUseCases {
         return this.userRepository.getById(id);
     }
 
-    getByEmail(email: string): Promise<object | null> {
+    getByEmail(email: string) {
 
         if (!email) {
             throw new BadRequestException('Email is required');

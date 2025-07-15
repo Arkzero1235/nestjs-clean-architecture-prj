@@ -53,7 +53,7 @@ export class UserRepositoryImpl implements UserRepository {
     async merge(id: string, updateUserDto: UpdateUserReqDto): Promise<UserDto | null> {
         try {
             const data: any = {
-                ...(updateUserDto.username && { username: updateUserDto.username }),
+                ...(updateUserDto.username && { userName: updateUserDto.username }),
                 ...(updateUserDto.email && { email: updateUserDto.email }),
                 ...(updateUserDto.role && { role: updateUserDto.role }),
             };
@@ -90,7 +90,7 @@ export class UserRepositoryImpl implements UserRepository {
             if (error instanceof PrismaClientKnownRequestError && error.code === 'P2025') {
                 throw new NotFoundException(`User is not found.`);
             }
-
+            console.log(error.message);
             throw new InternalServerErrorException('Unexpected error occurred');
         }
     }
@@ -180,7 +180,7 @@ export class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    async find(): Promise<UserDto | null> {
+    async find(): Promise<UserDto[] | null> {
         try {
             const get_all_users_result = await this.prismaService.user.findMany();
 
@@ -188,7 +188,7 @@ export class UserRepositoryImpl implements UserRepository {
                 throw new NotFoundException("There is no user")
             }
 
-            return ResMapper.mapResponseUserDto(get_all_users_result);
+            return ResMapper.mapResponseUserDtoList(get_all_users_result);
 
         } catch (error) {
             if (error instanceof NotFoundException) {

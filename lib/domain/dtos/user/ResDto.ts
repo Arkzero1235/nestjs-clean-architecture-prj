@@ -9,7 +9,7 @@ export class UserDto {
     address: string;
 
     phone: string;
-    
+
     password: string;
 
     role: string;
