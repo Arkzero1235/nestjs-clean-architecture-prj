@@ -6,7 +6,6 @@ export class OrderDetail {
     private productId: string;
     private quantity: number;
     private price: number;
-    private status: string;
 
     getId(): string {
         return this.id;
@@ -18,10 +17,6 @@ export class OrderDetail {
 
     getPrice(): number {
         return this.price;
-    }
-
-    getStatus(): string {
-        return this.status;
     }
 
     getTotal(): number {

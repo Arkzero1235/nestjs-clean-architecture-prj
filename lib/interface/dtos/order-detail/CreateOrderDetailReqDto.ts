@@ -1,7 +1,6 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsUUID } from "class-validator"
 
 export class CreateOrderDetailReqDto {
-
     @IsUUID()
     @IsNotEmpty()
     orderId: string
@@ -13,15 +12,4 @@ export class CreateOrderDetailReqDto {
     @IsNotEmpty()
     @IsNumber()
     quantity: number
-
-    @IsNotEmpty()
-    @IsNumber()
-    price: number
-
-    @IsOptional()
-    status?: string
-
-    @IsNotEmpty()
-    @IsNumber()
-    total: number
 }

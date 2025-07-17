@@ -15,7 +15,7 @@ export class OrderRepositoryImpl implements OrderRepository {
             const create_order_result = await this.prismaService.order.create({
                 data: {
                     userId: createOrderDto.userId,
-                    status: createOrderDto.status,
+                    status: "PENDING",
                     total: 0,
                 }
             })
@@ -47,10 +47,13 @@ export class OrderRepositoryImpl implements OrderRepository {
 
     async remove(id: string): Promise<OrderDto | null> {
         try {
-            const delete_order_result = await this.prismaService.order.delete({
+            const delete_order_result = await this.prismaService.order.update({
                 where: {
                     id: id
-                }
+                },
+                data: {
+                    status: "CANCEL",
+                },
             })
 
             return ResMapper.mapResponseOrderDto(delete_order_result);
@@ -60,35 +63,64 @@ export class OrderRepositoryImpl implements OrderRepository {
         }
     }
 
-    async find(userId: string): Promise<OrderDto | null> {
+    async getByIdWithDetails(orderId: string): Promise<OrderDto | null> {
         try {
-            const all_order_result = await this.prismaService.order.findMany({
-                where: {
-                    userId: userId
-                },
-                orderBy: {
-                    createdAt: "desc"
+            const order = await this.prismaService.order.findUnique({
+                where: { id: orderId },
+                include: {
+                    details: {
+                        include: {
+                            product: true
+                        }
+                    }
                 }
-            })
+            });
 
-            return ResMapper.mapResponseOrderDto(all_order_result);
+            if (!order) return null;
+
+            return order;
 
         } catch (error) {
             throw new InternalServerErrorException("Server error");
         }
     }
 
-    async getById(id: string): Promise<OrderDto | null> {
+    async getPendingOrder(userId: string): Promise<OrderDto | null> {
         try {
-            const get_order_by_id_result = await this.prismaService.order.findUnique({
+            const get_order_by_id_result = await this.prismaService.order.findFirst({
                 where: {
-                    id: id
+                    userId: userId,
+                    status: 'PENDING',
+                },
+                include: {
+                    details: true,
                 }
             })
 
-            if (!get_order_by_id_result) return null;
+            return get_order_by_id_result;
 
-            return ResMapper.mapResponseOrderDto(get_order_by_id_result);
+        } catch (error) {
+            throw new InternalServerErrorException("Server error");
+        }
+    }
+
+    async find(userId: string): Promise<object | null> {
+        try {
+            const find_result = await this.prismaService.order.findMany({
+                where: { userId },
+                include: {
+                    details: {
+                        include: {
+                            product: true  // Nếu muốn lấy cả thông tin sản phẩm
+                        }
+                    }
+                },
+                orderBy: {
+                    createdAt: 'desc' // Sắp xếp mới nhất trước
+                }
+            });
+
+            return find_result;
 
         } catch (error) {
             throw new InternalServerErrorException("Server error");

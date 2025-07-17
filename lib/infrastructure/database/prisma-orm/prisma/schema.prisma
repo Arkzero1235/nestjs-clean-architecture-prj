@@ -76,7 +76,6 @@ model OrderDetail {
   productId String
   quantity  Int
   price     Float
-  status    String
   total     Float
   createdAt DateTime @default(now())
 
@@ -85,14 +84,15 @@ model OrderDetail {
 }
 
 model Product {
-  id         String   @id @default(uuid())
-  name       String
-  price      Float
-  image      String
-  stock      Int
-  storage    Int
-  categoryId String
-  createdAt  DateTime @default(now())
+  id          String   @id @default(uuid())
+  name        String   @unique
+  price       Float
+  image       String
+  stock       Int
+  storage     Int
+  description String
+  categoryId  String
+  createdAt   DateTime @default(now())
 
   category     Category      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   orderDetails OrderDetail[]

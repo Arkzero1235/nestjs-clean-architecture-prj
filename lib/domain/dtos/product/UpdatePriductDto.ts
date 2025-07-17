@@ -3,5 +3,7 @@ export class UpdateProductDto {
     price?: number;
     image?: string;
     stock?: number;
-    views?: number;
+    description?: string;
+    storage?: number;
+    categoryId: string;
 }

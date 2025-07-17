@@ -43,8 +43,8 @@ export class CategoryUseCases {
 
         // Log error
         if (!existingCategory) {
-            this.logger.error("Cannot found category", undefined, "At update category usecase");
-            throw new ConflictException("Cannot found category");
+            this.logger.error("Cannot find category", undefined, "At update category usecase");
+            throw new ConflictException("Cannot find category");
         }
 
         // Update category
@@ -63,8 +63,8 @@ export class CategoryUseCases {
 
         // Log error
         if (!existingCategory) {
-            this.logger.error("Cannot found category", undefined, "At delete category usecase");
-            throw new ConflictException("Cannot found category");
+            this.logger.error("Cannot find category", undefined, "At delete category usecase");
+            throw new ConflictException("Cannot find category");
         }
 
         // Delete category

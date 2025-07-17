@@ -20,7 +20,7 @@ export class AuthUseCases {
 
         // Log error
         if (!user) {
-            this.logger.error("Cannot found user", undefined, "At login usecase");
+            this.logger.error("Cannot find user", undefined, "At login usecase");
             throw new NotFoundException("Account is not found");
         }
 

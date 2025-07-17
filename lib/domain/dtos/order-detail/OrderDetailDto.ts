@@ -8,8 +8,4 @@ export class OrderDetailDto {
     quantity: number
 
     price: number
-
-    status?: string
-
-    createdAt: string
 }

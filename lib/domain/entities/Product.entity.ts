@@ -7,6 +7,7 @@ export class Product {
     private image: string;
     private stock: number;
     private storage: number;
+    private description: string;
 
     getId(): string {
         return this.id;

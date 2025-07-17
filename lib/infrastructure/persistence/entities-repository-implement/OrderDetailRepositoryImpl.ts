@@ -1,7 +1,6 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { CreateOrderDetailDto } from "lib/domain/dtos/order-detail/CreateOrderDetailDto";
-import { OrderDetailDto } from "lib/domain/dtos/order-detail/ResDto";
-import { UpdateOrderDetailDto } from "lib/domain/dtos/order-detail/UpdateOrderDetailDto";
+import { OrderDetailDto } from "lib/domain/dtos/order-detail/OrderDetailDto";
 import { OrderDetailRepository } from "lib/domain/repositories/OrderDetailRepository";
 import { PrismaService } from "lib/infrastructure/database/prisma-orm/prisma.service";
 import { ResMapper } from "lib/interface/mappers/ResMapper";
@@ -11,133 +10,104 @@ export class OrderDetailRepositoryImpl implements OrderDetailRepository {
     constructor(private readonly prismaService: PrismaService) { }
 
     async updateOrderTotal(orderId: string): Promise<void> {
-        // Get all orderdetails of this orderId
-        const details = await this.prismaService.orderDetail.findMany({
-            where: { orderId },
-            select: { total: true }
-        });
+        try {
+            const details = await this.prismaService.orderDetail.findMany({
+                where: { orderId },
+                select: { total: true },
+            });
 
-        // Calculate sum total
-        const total = details.reduce((sum, item) => sum + item.total, 0);
+            // Tính tổng tiền từ các chi tiết đơn hàng
+            const total = details.reduce((sum, item) => sum + item.total, 0);
 
-        // Update Order.total
-        await this.prismaService.order.update({
-            where: { id: orderId },
-            data: { total }
-        });
+            // Cập nhật total cho bảng Order
+            await this.prismaService.order.update({
+                where: { id: orderId },
+                data: { total },
+            });
+        } catch (error) {
+            throw new InternalServerErrorException("Server error")
+        }
     }
 
-    async persist(createOrderDetailDto: CreateOrderDetailDto): Promise<OrderDetailDto | null> {
+    async persist(createOrderDetailDto: CreateOrderDetailDto, price: number, stock: number): Promise<OrderDetailDto | null> {
         try {
-
-            // Create new orderdetail
-            const create_result = await this.prismaService.orderDetail.create({
+            const total = price * stock;
+            const created_order_detail = await this.prismaService.orderDetail.create({
                 data: {
                     orderId: createOrderDetailDto.orderId,
                     productId: createOrderDetailDto.productId,
                     quantity: createOrderDetailDto.quantity,
-                    price: createOrderDetailDto.price,
-                    status: createOrderDetailDto.status || "",
-                    total: createOrderDetailDto.quantity * createOrderDetailDto.price || 0,
-                }
-            })
+                    price,
+                    total
+                },
+            });
 
-            // Update order.total
-            await this.updateOrderTotal(create_result.orderId);
-
-            return ResMapper.mapResponseOrderDetailDto(create_result);
+            return created_order_detail;
 
         } catch (error) {
-            throw new InternalServerErrorException("Server error");
+            throw new InternalServerErrorException("Server error")
         }
     }
 
-    async merge(id: string, updateOrderDetailDto: UpdateOrderDetailDto): Promise<OrderDetailDto | null> {
+    async merge(id: string, quantity: number): Promise<OrderDetailDto | null> {
         try {
-            // Get current data
-            const existing = await this.prismaService.orderDetail.findUnique({
-                where: { id: id },
+            const detail = await this.prismaService.orderDetail.findUnique({
+                where: { id },
             });
 
-            if (!existing) {
-                throw new NotFoundException("Order detail not found");
+            if (!detail) {
+                throw new NotFoundException("Không tìm thấy chi tiết đơn hàng");
             }
 
-            // Update data
-            const quantity = updateOrderDetailDto.quantity ?? existing.quantity;
-            const price = updateOrderDetailDto.price ?? existing.price;
-            const status = updateOrderDetailDto.status ?? existing.status;
+            const newQuantity = detail.quantity + quantity;
+            const newTotal = detail.price * newQuantity;
 
-            const data: any = {
-                quantity,
-                price,
-                status,
-                total: quantity * price // update total
-            };
-
-            // Update order detail
-            const update_result = await this.prismaService.orderDetail.update({
-                where: { id: id },
-                data
-            });
-
-            // Update order.total
-            await this.updateOrderTotal(existing.orderId);
-
-            return ResMapper.mapResponseOrderDetailDto(update_result);
-
-        } catch (error) {
-            throw new InternalServerErrorException("Server error");
-        }
-    }
-
-    async remove(id: string): Promise<OrderDetailDto | null> {
-        try {
-            const delete_result = await this.prismaService.orderDetail.delete({
-                where: {
-                    id: id
-                }
-            })
-
-            await this.updateOrderTotal(delete_result.orderId);
-
-            return ResMapper.mapResponseOrderDetailDto(delete_result);
-
-        } catch (error) {
-            throw new InternalServerErrorException("Server error");
-        }
-    }
-
-    async find(orderId: string): Promise<OrderDetailDto[] | null> {
-        try {
-            const all_order_details = await this.prismaService.orderDetail.findMany({
-                where: { orderId },
-                include: {
-                    product: true
-                }
-            });
-
-            return ResMapper.mapResponseOrderDetailDtoList(all_order_details);
-        }
-        catch (error) {
-            throw new InternalServerErrorException("Server error");
-        }
-    }
-
-    async getById(id: string): Promise<OrderDetailDto | null> {
-        try {
-            const getted_result = await this.prismaService.orderDetail.findUnique({
+            const updatedDetail = await this.prismaService.orderDetail.update({
                 where: { id },
-                include: {
-                    product: true
-                }
-            })
+                data: {
+                    quantity: newQuantity,
+                    total: newTotal,
+                },
+            });
 
-            return ResMapper.mapResponseOrderDetailDto(getted_result);
+            const details = await this.prismaService.orderDetail.findMany({
+                where: { orderId: detail.orderId },
+                select: { total: true },
+            });
 
+            const orderTotal = details.reduce((sum, item) => sum + item.total, 0);
+
+            await this.prismaService.order.update({
+                where: { id: detail.orderId },
+                data: { total: orderTotal },
+            });
+
+            return updatedDetail;
         } catch (error) {
             throw new InternalServerErrorException("Server error");
         }
     }
 
+    remove(id: string): Promise<OrderDetailDto | null> {
+        throw new Error("Method not implemented.");
+    }
+
+    async get(orderId: string, productId: string): Promise<OrderDetailDto | null> {
+        try {
+            const find_result = await this.prismaService.orderDetail.findFirst({
+                where: {
+                    orderId: orderId,
+                    productId: productId
+                }
+            })
+
+            return find_result;
+        } catch (error) {
+            throw new InternalServerErrorException("Server error");
+        }
+    }
+
+    find(orderId: string, productId: string): Promise<OrderDetailDto[] | null> {
+        throw new Error("Method not implemented.");
+    }
 }

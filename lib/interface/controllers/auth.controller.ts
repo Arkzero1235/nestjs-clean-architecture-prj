@@ -64,7 +64,7 @@ export class AuthController {
     @ApiOperation({
         summary: "Tạo mới access token"
     })
-    @ApiCreatedResponse({
+    @ApiOkResponse({
         description: "Renew access token success",
         schema: {
             type: "object",

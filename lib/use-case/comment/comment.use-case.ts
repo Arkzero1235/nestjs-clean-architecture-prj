@@ -50,7 +50,7 @@ export class CommentUseCases {
 
         // Log error
         if (!existingComment) {
-            this.logger.error("Cannot found comment", undefined, "At update comment usecase");
+            this.logger.error("Cannot find comment", undefined, "At update comment usecase");
             throw new NotFoundException("Cannot found comment");
         }
 
@@ -70,7 +70,7 @@ export class CommentUseCases {
 
         // Log error
         if (!existingComment) {
-            this.logger.error("Cannot found comment", undefined, "At delete comment usecase");
+            this.logger.error("Cannot find comment", undefined, "At delete comment usecase");
             throw new NotFoundException("Cannot found comment");
         }
 
@@ -90,7 +90,7 @@ export class CommentUseCases {
 
         // Log error
         if (!existingUser) {
-            this.logger.error("Cannot found user", undefined, "At create comment usecase");
+            this.logger.error("Cannot find user", undefined, "At create comment usecase");
             throw new NotFoundException("Cannot found user to create comment");
         }
 

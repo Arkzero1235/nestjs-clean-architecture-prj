@@ -101,28 +101,4 @@ export class ResMapper {
             updatedAt: order.updatedAt
         }))
     }
-
-    static mapResponseOrderDetailDto(ormData: any): OrderDetailResDto | null {
-        return {
-            id: ormData.id,
-            orderId: ormData.orderId,
-            productId: ormData.productId,
-            price: ormData.price,
-            quantity: ormData.quantity,
-            status: ormData.status,
-            createdAt: ormData.status
-        }
-    }
-
-    static mapResponseOrderDetailDtoList(ormData: any[]): OrderDetailResDto[] | null {
-        return ormData.map(orderDetail => ({
-            id: orderDetail.id,
-            orderId: orderDetail.orderId,
-            productId: orderDetail.productId,
-            price: orderDetail.price,
-            quantity: orderDetail.quantity,
-            status: orderDetail.status,
-            createdAt: orderDetail.status
-        }))
-    }
 }

@@ -1,6 +1,7 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsUUID } from "class-validator"
 
 export class OrderDetailResDto {
+
     @IsUUID()
     @IsNotEmpty()
     id: string;
@@ -20,9 +21,6 @@ export class OrderDetailResDto {
     @IsNotEmpty()
     @IsNumber()
     price: number
-
-    @IsOptional()
-    status?: string
 
     @IsNotEmpty()
     createdAt: string

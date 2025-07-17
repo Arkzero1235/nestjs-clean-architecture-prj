@@ -20,10 +20,10 @@ import { CreateOrderDto } from "lib/domain/dtos/order/CreateOrderDto";
 import { OrderStatusMapper } from "./OrderStatusMapper";
 import { UpdateOrderReqDto } from "../dtos/order/UpdateOrderReqDto";
 import { UpdateOrderDto } from "lib/domain/dtos/order/UpdateOrderDto";
-import { CreateOrderDetailReqDto } from "../dtos/order-detail/CreateOrderDetailReqDto";
-import { CreateOrderDetailDto } from "lib/domain/dtos/order-detail/CreateOrderDetailDto";
-import { UpdateOrderDetailReqDto } from "../dtos/order-detail/UpdateOrderDetailReqDto";
-import { UpdateOrderDetailDto } from "lib/domain/dtos/order-detail/UpdateOrderDetailDto";
+import { CreateProductReqDto } from "../dtos/product/CreateProductReqDto";
+import { CreateProductDto } from "lib/domain/dtos/product/CreateProductDto";
+import { UpdateProductReqDto } from "../dtos/product/UpdateProductReqDto";
+import { UpdateProductDto } from "lib/domain/dtos/product/UpdatePriductDto";
 
 export class ReqMapper {
     static LoginMapper(LoginReqDto: LoginReqDto): LoginDto {
@@ -90,7 +90,8 @@ export class ReqMapper {
     static CreateOrderMapper(createOrderReqDto: CreateOrderReqDto): CreateOrderDto {
         return {
             userId: createOrderReqDto.userId,
-            status: OrderStatusMapper.map(createOrderReqDto.status)
+            productId: createOrderReqDto.productId,
+            quantity: createOrderReqDto.quantity
         }
     }
 
@@ -102,22 +103,27 @@ export class ReqMapper {
         }
     }
 
-    static CreateOrderDetailMapper(createOrderDetailReqDto: CreateOrderDetailReqDto): CreateOrderDetailDto {
+    static CreateProductMapper(createProductReqDto: CreateProductReqDto): CreateProductDto {
         return {
-            orderId: createOrderDetailReqDto.orderId,
-            productId: createOrderDetailReqDto.productId,
-            price: createOrderDetailReqDto.price,
-            quantity: createOrderDetailReqDto.quantity,
-            status: createOrderDetailReqDto.status
+            name: createProductReqDto.name,
+            price: createProductReqDto.price,
+            image: createProductReqDto.image,
+            stock: createProductReqDto.stock,
+            description: createProductReqDto.description,
+            storage: createProductReqDto.storage,
+            categoryId: createProductReqDto.categoryId
         }
     }
 
-    static UpdateOrderDetailMapper(updateOrderDetailReqDto: UpdateOrderDetailReqDto): UpdateOrderDetailDto {
+    static UpdateProductMapper(updateProductReqDto: UpdateProductReqDto): UpdateProductDto {
         return {
-            orderId: updateOrderDetailReqDto.orderId,
-            price: updateOrderDetailReqDto.price,
-            quantity: updateOrderDetailReqDto.quantity,
-            status: updateOrderDetailReqDto.status,
+            name: updateProductReqDto.name,
+            price: updateProductReqDto.price,
+            image: updateProductReqDto.image,
+            stock: updateProductReqDto.stock,
+            description: updateProductReqDto.description,
+            storage: updateProductReqDto.storage,
+            categoryId: updateProductReqDto.categoryId
         }
     }
 }

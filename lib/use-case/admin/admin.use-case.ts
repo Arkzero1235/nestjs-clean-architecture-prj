@@ -47,8 +47,8 @@ export class AdminUsecases {
 
         // Log error
         if (!existingUser) {
-            this.logger.error("Cannot found admin", undefined, "At update admin usecase");
-            throw new NotFoundException("Cannot found admin");
+            this.logger.error("Cannot find admin", undefined, "At update admin usecase");
+            throw new NotFoundException("Cannot find admin");
         }
 
         // Check email (if needed)
@@ -80,8 +80,8 @@ export class AdminUsecases {
 
         // Log error
         if (!existingUser) {
-            this.logger.error("Cannot found admin", undefined, "At delete admin usecase");
-            throw new NotFoundException("Cannot found admin");
+            this.logger.error("Cannot find admin", undefined, "At delete admin usecase");
+            throw new NotFoundException("Cannot find admin");
         }
 
         // Delete admin
