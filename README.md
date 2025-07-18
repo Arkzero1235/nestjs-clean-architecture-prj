@@ -88,10 +88,9 @@ npm run test
 
 ## ✅ Các chức năng hiện có
 
-- [x] CRUD cho người dùng
-- [x] Xác thực JWT
-- [x] Phân tách tầng rõ ràng theo Clean Architecture
-- [ ] Giao tiếp với API bên ngoài (đang phát triển)
+- [x] Đăng nhập & đăng ký tài khoản người dùng
+- [x] Xác thực JWT (Authentication & Authorization)
+- [x] Quản lý tài khoản người dùng, đơn hàng, giỏ hàng, danh mục, sản phẩm, banner, ...
 
 ## 🧠 Kiến trúc Clean
 
