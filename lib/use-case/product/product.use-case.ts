@@ -1,13 +1,15 @@
-import { ConflictException, Injectable, Logger } from "@nestjs/common";
+import { ConflictException, Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { CreateProductDto } from "lib/domain/dtos/product/CreateProductDto";
 import { UpdateProductDto } from "lib/domain/dtos/product/UpdatePriductDto";
 import { Product } from "lib/domain/entities/Product.entity";
+import { CategoryRepository } from "lib/domain/repositories/CategoryRepository";
 import { ProductRepository } from "lib/domain/repositories/ProductRepository";
 
 @Injectable()
 export class ProductUseCases {
     constructor(
         private readonly productRepository: ProductRepository,
+        private readonly categoryRepository: CategoryRepository,
         private readonly logger: Logger
     ) { }
 
@@ -22,6 +24,15 @@ export class ProductUseCases {
         if (existingProduct) {
             this.logger.error(`Product name [${createProductDto.name}] is already existed`, undefined, "At create product usecase");
             throw new ConflictException(`Product name [${createProductDto.name}] is already existed`);
+        }
+
+        // Check existing category
+        const existingCategory = await this.categoryRepository.getById(createProductDto.categoryId);
+
+        // Log error
+        if (!existingCategory) {
+            this.logger.error(`Cannot find category [${createProductDto.categoryId}]`, undefined, "At create product usecase");
+            throw new NotFoundException(`Cannot find category [${createProductDto.categoryId}]`);
         }
 
         // New instance
