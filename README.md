@@ -14,7 +14,7 @@ Dự án nhằm xây dựng một hệ thống backend chuẩn hóa theo kiến 
 ## 📁 Cấu trúc thư mục
 
 ```
-src/
+lib/
 ├── domain/              # Entities, Interfaces, Repositories
 │   ├── entities/
 │   └── repositories/
