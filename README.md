@@ -86,22 +86,23 @@ JWT_ACCESS_EXPIRES_IN=30s
 JWT_REFRESH_EXPIRES_IN=7d
 ```
 
-### 4. Chạy project
+### 4. Migrate prisma ORM
 
 ```bash
-npm run start:dev
-```
-
-### 5. Migrate prisma ORM
-
-```bash
+cd lib/infrastructure/database/prisma-orm
 npx prisma migrate dev
 ```
 
-### 6. Generate prisma seed
+### 5. Generate prisma seed 
 
 ```bash
 npx prisma db seed
+```
+
+### 6. Chạy project
+
+```bash
+npm run start:dev
 ```
 
 ## 📄 Swagger document
