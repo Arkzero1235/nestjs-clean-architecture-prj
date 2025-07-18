@@ -1,6 +1,6 @@
 # 🧱 NestJS Clean Architecture Project
 
-> Một dự án cá nhân sử dụng **NestJS** kết hợp với **Clean Architecture** để đảm bảo tính mô-đun, dễ mở rộng và bảo trì lâu dài.
+> Một dự án sử dụng **NestJS** kết hợp với **Clean Architecture** để đảm bảo tính mô-đun, dễ mở rộng và bảo trì lâu dài.
 
 ## 📌 Mục tiêu
 
