@@ -47,6 +47,7 @@ lib/
 - [NestJS](https://nestjs.com/)
 - [PostgreSQL](https://www.postgresql.org/docs/)
 - [Prisma](https://www.prisma.io/docs)
+- [Docker](https://docs.docker.com/)
 
 ## 🔧 Cài đặt và chạy dự án
 
