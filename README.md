@@ -54,6 +54,12 @@ lib/
 
 ## 🔧 Cài đặt và chạy dự án
 
+### 0. Phần mềm yêu cầu
+
+- **Visual Studio Code** ![VSCode](https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_256,h_256/https://assets.ubuntu.com/v1/034147e9-code_ozwVHSV.png) 
+
+-  **pgAdmin 4** ![pgAdmin](https://api.nuget.org/v3-flatcontainer/danielcunha.toolkit.postgresql.snakecase/1.1.0/icon)
+
 ### 1. Clone dự án
 
 ```bash
@@ -73,7 +79,7 @@ Tạo file `.env`:
 
 ```env
 PORT=3000
-DATABASE_URL_DEL="postgres://user:password@postgres:5432/db_name"
+DATABASE_URL="postgresql://user:password@localhost:5432/DB_name?schema=public"
 JWT_ACCESS_SECRET="your_access_secret"
 JWT_REFRESH_SECRET="your_refresh_secret"
 JWT_ACCESS_EXPIRES_IN=30s
