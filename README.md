@@ -19,9 +19,8 @@ lib/
 │   ├── entities/
 │   └── repositories/
 │
-├── application/         # Use Cases, DTOs, Interfaces
+├── application/         # Use Cases,  Interfaces
 │   ├── use-cases/
-│   └── dto/
 │
 ├── infrastructure/      # Giao tiếp với DB, API bên ngoài
 │   ├── database/
