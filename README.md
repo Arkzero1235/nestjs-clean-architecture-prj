@@ -45,12 +45,8 @@ lib/
 </p>
 
 - [NestJS](https://nestjs.com/)
-- TypeScript
 - [PostgreSQL](https://www.postgresql.org/docs/)
 - [Prisma](https://www.prisma.io/docs)
-- Class-validator
-- Dotenv
-- Bcrypt & JWT
 
 ## 🔧 Cài đặt và chạy dự án
 
