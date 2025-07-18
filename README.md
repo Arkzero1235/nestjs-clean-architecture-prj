@@ -128,7 +128,7 @@ Clean Architecture giúp:
 
 - [Clean Architecture - Uncle Bob](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html)
 - [NestJS Documentation](https://docs.nestjs.com/)
-- [Awesome NestJS Clean Architecture Example](https://github.com/jmcdo29/clean-nest)
+- [NestJS Clean Architecture Project Example](https://github.com/jbuget/nodejs-clean-architecture-app.git)
 
 ---
 
