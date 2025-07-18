@@ -60,7 +60,7 @@ lib/
 
 -  **pgAdmin 4** ![pgAdmin](https://api.nuget.org/v3-flatcontainer/danielcunha.toolkit.postgresql.snakecase/1.1.0/icon)
 
-### 1. Clone dự án
+### 1. Clone project
 
 ```bash
 git clone https://github.com/Arkzero1235/nestjs-clean-architecture-prj.git
