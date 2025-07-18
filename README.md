@@ -37,11 +37,11 @@ lib/
 
 - [NestJS](https://nestjs.com/)
 - TypeScript
-- PostgreSQL / MySQL (tuỳ chọn)
-- Prisma / TypeORM (tuỳ chọn)
+- [PostgreSQL](https://www.postgresql.org/docs/)
+- [Prisma](https://www.prisma.io/docs)
 - Class-validator
 - Dotenv
-- Bcrypt / JWT (nếu có xác thực)
+- Bcrypt & JWT
 
 ## 🔧 Cài đặt và chạy dự án
 
