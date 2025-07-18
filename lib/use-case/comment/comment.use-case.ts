@@ -91,7 +91,7 @@ export class CommentUseCases {
         // Log error
         if (!existingUser) {
             this.logger.error("Cannot find user", undefined, "At create comment usecase");
-            throw new NotFoundException("Cannot found user to create comment");
+            throw new NotFoundException("Cannot find user");
         }
 
         // Get comments of userId
