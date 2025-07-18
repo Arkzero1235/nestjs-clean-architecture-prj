@@ -5,5 +5,5 @@ export class UpdateProductDto {
     stock?: number;
     description?: string;
     storage?: number;
-    categoryId: string;
+    categoryId?: string;
 }

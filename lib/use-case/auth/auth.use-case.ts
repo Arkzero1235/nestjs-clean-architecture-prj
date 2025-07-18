@@ -1,5 +1,6 @@
 import { Inject, Injectable, Logger, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { LoginDto } from "lib/domain/dtos/user/LoginDto";
+import { AdminRepository } from "lib/domain/repositories/AdminRepository";
 import { AuthRepository } from "lib/domain/repositories/AuthRepository";
 import { UserRepository } from "lib/domain/repositories/UserRepository";
 import { ITokenService } from "lib/domain/services/ITokenService";
@@ -9,11 +10,12 @@ export class AuthUseCases {
     constructor(
         private authRepository: AuthRepository,
         private userRepository: UserRepository,
+        private adminRepository: AdminRepository,
         private iTokenService: ITokenService,
         private readonly logger: Logger
     ) { }
 
-    // Usecase: Đăng nhập
+    // Usecase: Đăng nhập người dùng
     async login(loginDto: LoginDto) {
         // Check existing user
         const user = await this.userRepository.checkEmail(loginDto.email);
@@ -50,6 +52,45 @@ export class AuthUseCases {
         }
 
         return { id: user.id, accessToken, refreshToken }
+    }
+
+    // Usecase: Đăng nhập admin
+    async loginAdmin(loginDto: LoginDto) {
+        // Check existing admin
+        const admin = await this.adminRepository.checkMail(loginDto.email);
+
+        // Log error
+        if (!admin) {
+            this.logger.error("Cannot find admin", undefined, "At login usecase");
+            throw new NotFoundException("Cannot find admin");
+        }
+
+        // Validate password
+        const isValid: boolean = await this.authRepository.validatePassword(loginDto.password, admin.password);
+
+        if (!isValid) {
+            this.logger.error("Password is not correct", undefined, "At login usecase");
+            throw new UnauthorizedException("Invalid credentials");
+        }
+
+        // Init payload for token
+        const payload = {
+            id: admin.id,
+            name: admin.name,
+            role: admin.role
+        }
+
+        // Create token
+        const accessToken = this.iTokenService.generateAccessToken(payload);
+
+        const refreshToken = this.iTokenService.generateRefreshToken(payload);
+
+        // Log result
+        if (accessToken && refreshToken && isValid) {
+            this.logger.log("Login admin success", "At auth usecases");
+        }
+
+        return { id: admin.id, accessToken, refreshToken }
     }
 
     // Usecase: Đăng xuất

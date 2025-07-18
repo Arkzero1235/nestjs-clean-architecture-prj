@@ -9,4 +9,6 @@ export class AdminDto {
     password: string
 
     phone: string
+
+    role: string
 }

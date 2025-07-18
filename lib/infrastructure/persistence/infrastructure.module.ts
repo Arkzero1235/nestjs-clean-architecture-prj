@@ -24,6 +24,8 @@ import { OrderDetailRepository } from "lib/domain/repositories/OrderDetailReposi
 import { OrderDetailRepositoryImpl } from "./entities-repository-implement/OrderDetailRepositoryImpl";
 import { ProductRepository } from "lib/domain/repositories/ProductRepository";
 import { ProductRepositoryImpl } from "./entities-repository-implement/ProductRepositoryImpl";
+import { SliderRepository } from "lib/domain/repositories/SliderRepository";
+import { SliderRepositoryImpl } from "./entities-repository-implement/SliderRepositoryImpl";
 @Module({
     imports: [
         JwtModule.registerAsync({
@@ -80,9 +82,14 @@ import { ProductRepositoryImpl } from "./entities-repository-implement/ProductRe
         {
             provide: ProductRepository,
             useClass: ProductRepositoryImpl
+        },
+        {
+            provide: SliderRepository,
+            useClass: SliderRepositoryImpl
         }
     ],
     exports: [
+        JwtModule,
         ReqMapper,
         ITokenService,
         Logger,
@@ -95,7 +102,8 @@ import { ProductRepositoryImpl } from "./entities-repository-implement/ProductRe
         CommentRepository,
         OrderRepository,
         OrderDetailRepository,
-        ProductRepository
+        ProductRepository,
+        SliderRepository
     ],
 })
 export class InfrastructureModule { }

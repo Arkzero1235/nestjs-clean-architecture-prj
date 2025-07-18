@@ -5,17 +5,21 @@ import { ReqMapper } from "../mappers/ReqMapper";
 import { ApiResponseHelper } from "../helper/response-helper";
 import { Response, Request } from 'express';
 import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation } from "@nestjs/swagger";
+import { CreateUerReqDto } from "../dtos/user/CreateUserReqDto";
+import { UserResDto } from "../dtos/user/UserResDto";
+import { UserUseCases } from "lib/use-case/user/user.use-case";
 
 @Controller('/auth')
 export class AuthController {
     constructor(
         private authUseCase: AuthUseCases,
+        private readonly userUseCases: UserUseCases,
         private readonly logger: Logger
     ) { }
 
     @Post('/login')
     @ApiOperation({
-        summary: "Đăng nhập tài khoản"
+        summary: "Đăng nhập tài khoản - CLIENT"
     })
     @ApiBody({
         type: LoginReqDto
@@ -45,7 +49,7 @@ export class AuthController {
 
         res.cookie('re_tkn', refreshToken, {
             httpOnly: true,
-            secure: false, // bật lên true nếu dùng https
+            secure: false,
             sameSite: 'strict',
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 ngày
         })
@@ -60,9 +64,80 @@ export class AuthController {
         )
     }
 
+    @Post('/admin')
+    @ApiOperation({
+        summary: "Đăng nhập tài khoản admin - ADMIN"
+    })
+    @ApiBody({
+        type: LoginReqDto
+    })
+    @ApiCreatedResponse({
+        description: "Login success",
+        schema: {
+            type: "object",
+            properties: {
+                statusCode: { type: 'number', example: 201 },
+                data: {
+                    type: 'object',
+                    properties: {
+                        sub: { type: 'string', example: 'b32c439a-7f7a-4a17-ab16-73342f669260' },
+                        token: { type: 'string', example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6...' }
+                    }
+                }
+            }
+        }
+    })
+    async loginAdmin(@Body() loginReqDto: LoginReqDto, @Res({ passthrough: true }) res: Response) {
+        this.logger.log("Login request received", "At auth controller");
+
+        const mapLoginData = ReqMapper.LoginMapper(loginReqDto);
+
+        const { id, accessToken, refreshToken } = await this.authUseCase.loginAdmin(mapLoginData);
+
+        res.cookie('re_tkn', refreshToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 ngày
+        })
+
+        return ApiResponseHelper.success(
+            "Login successed",
+            {
+                sub: id,
+                token: accessToken
+            },
+            201
+        )
+    }
+
+    @Post()
+    @ApiOperation({
+        summary: "Đăng ký tài khoản người dùng - CLIENT"
+    })
+    @ApiBody({
+        type: CreateUerReqDto
+    })
+    @ApiCreatedResponse({
+        description: "Create new user success",
+        type: UserResDto
+    })
+    async create(@Body() create_user: CreateUerReqDto) {
+        this.logger.log("Create user request received", "At user controller");
+
+        const mapData = ReqMapper.CreateUserMapper(create_user); // map req data -> use case data
+        const result = await this.userUseCases.createUser(mapData);
+
+        return ApiResponseHelper.success(
+            "Create new user success",
+            result,
+            201
+        )
+    }
+
     @Get('/refresh-token')
     @ApiOperation({
-        summary: "Tạo mới access token"
+        summary: "Tạo mới access token - CLIENT - ADMIN"
     })
     @ApiOkResponse({
         description: "Renew access token success",
@@ -86,7 +161,7 @@ export class AuthController {
 
     @Post('logout')
     @ApiOperation({
-        summary: "Đăng xuất tài khoản"
+        summary: "Đăng xuất tài khoản - CLIENT - ADMIN"
     })
     @ApiCreatedResponse({
         description: "Logout success",

@@ -59,7 +59,9 @@ export class OrderDetailRepositoryImpl implements OrderDetailRepository {
                 throw new NotFoundException("Không tìm thấy chi tiết đơn hàng");
             }
 
-            const newQuantity = detail.quantity + quantity;
+            console.log(quantity);
+
+            const newQuantity = quantity;
             const newTotal = detail.price * newQuantity;
 
             const updatedDetail = await this.prismaService.orderDetail.update({

@@ -12,6 +12,7 @@ import { CommentModule } from './use-case/comment/comment.module';
 import { OrderModule } from './use-case/order/order.module';
 import { AuthController } from './interface/controllers/auth.controller';
 import { ProductModule } from './use-case/product/product.module';
+import { SliderModule } from './use-case/slider/slider.module';
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { ProductModule } from './use-case/product/product.module';
     CategoryModule,
     CommentModule,
     OrderModule,
-    ProductModule
+    ProductModule,
+    SliderModule
   ],
   controllers: [AppController, AuthController],
   providers: [

@@ -1,14 +1,19 @@
-import { Body, Controller, Delete, Injectable, Logger, Param, Patch, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Injectable, Logger, Param, Patch, Post, UseGuards } from "@nestjs/common";
 import { AdminUsecases } from "lib/use-case/admin/admin.use-case";
 import { CreateAdminReqDto } from "../dtos/admin/CreateAdminReqDto";
 import { ReqMapper } from "../mappers/ReqMapper";
 import { ApiResponseHelper } from "../helper/response-helper";
 import { UpdateAdminReqDto } from "../dtos/admin/UpdateAdminReqDto";
-import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiResponse } from "@nestjs/swagger";
 import { CreateAdminDto } from "lib/domain/dtos/admin/CreateAdminDto";
 import { AdminResDto } from "../dtos/admin/AdminResDto";
+import { AuthenticationGuard } from "lib/infrastructure/jwt/authentication.guard";
+import { AuthorizationGuard } from "lib/infrastructure/jwt/authorization.guard";
+import { Roles } from "lib/infrastructure/jwt/roles.decorator";
 
 @Injectable()
+@UseGuards(AuthenticationGuard, AuthorizationGuard)
+@ApiBearerAuth()
 @Controller("/admin")
 export class AdminController {
     constructor(
@@ -16,9 +21,10 @@ export class AdminController {
         private readonly logger: Logger
     ) { }
 
+    @Roles(["ADMIN"])
     @Post()
     @ApiOperation({
-        summary: "Tạo 1 tài khoản admin"
+        summary: "Tạo 1 tài khoản admin - ADMIN"
     })
     @ApiBody({
         type: CreateAdminReqDto
@@ -38,9 +44,17 @@ export class AdminController {
         )
     }
 
+    @Roles(["ADMIN"])
     @Patch("/:id")
     @ApiOperation({
-        summary: "Cập nhật 1 tài khoản admin"
+        summary: "Cập nhật 1 tài khoản admin - ADMIN"
+    })
+    @ApiParam({
+        name: 'id',
+        type: String,
+        required: true,
+        example: '3327cd87-5740-4ff0-a79f-aaec52656ecb',
+        description: 'id của admin cần cập nhật'
     })
     @ApiBody({
         type: UpdateAdminReqDto
@@ -60,9 +74,17 @@ export class AdminController {
         )
     }
 
+    @Roles(["ADMIN"])
     @Delete("/:id")
     @ApiOperation({
-        summary: "Xóa 1 tài khoản admin"
+        summary: "Xóa 1 tài khoản admin - ADMIN"
+    })
+    @ApiParam({
+        name: 'id',
+        type: String,
+        required: true,
+        example: '3327cd87-5740-4ff0-a79f-aaec52656ecb',
+        description: 'id của admin cần xóa'
     })
     @ApiOkResponse({
         description: "Delete admin success",

@@ -46,7 +46,8 @@ export class ResMapper {
             email: ormData.email,
             name: ormData.name,
             password: ormData.password,
-            phone: ormData.phone
+            phone: ormData.phone,
+            role: ormData.role
         }
     }
 

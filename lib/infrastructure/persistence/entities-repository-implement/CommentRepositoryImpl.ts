@@ -62,7 +62,7 @@ export class CommentRepositoryImpl implements CommentRepository {
         }
     }
 
-    async find(userId: string): Promise<CommentDto | null> {
+    async find(userId: string): Promise<CommentDto[] | null> {
         try {
             // Find all comments of user with id
             const all_comment_result = await this.prismaService.comment.findMany({
@@ -71,7 +71,7 @@ export class CommentRepositoryImpl implements CommentRepository {
                 }
             })
 
-            return ResMapper.mapResponseCommentDto(all_comment_result);
+            return ResMapper.mapResponseCommentDtoList(all_comment_result);
 
         } catch (error) {
             console.log(error.message);

@@ -1,13 +1,19 @@
-import { Body, Controller, Delete, Get, Logger, Param, Patch, Post, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Injectable, Logger, Param, Patch, Post, Query, UseGuards } from "@nestjs/common";
 import { UserUseCases } from "lib/use-case/user/user.use-case";
 import { UpdateUserReqDto } from "lib/interface/dtos/user/UpdateUserReqDto";
 import { CreateUerReqDto } from "../dtos/user/CreateUserReqDto";
 import { ReqMapper } from "../mappers/ReqMapper";
 import { ApiResponseHelper } from "../helper/response-helper";
-import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery } from "@nestjs/swagger";
 import { CreateUserDto } from "lib/domain/dtos/user/CreateUserDto";
 import { UserResDto } from "../dtos/user/UserResDto";
+import { AuthenticationGuard } from "lib/infrastructure/jwt/authentication.guard";
+import { AuthorizationGuard } from "lib/infrastructure/jwt/authorization.guard";
+import { Roles } from "lib/infrastructure/jwt/roles.decorator";
 
+@Injectable()
+@UseGuards(AuthenticationGuard, AuthorizationGuard)
+@ApiBearerAuth()
 @Controller('/user')
 export class UserController {
     constructor(
@@ -15,9 +21,10 @@ export class UserController {
         private readonly logger: Logger
     ) { }
 
+    @Roles(["ADMIN"])
     @Get()
     @ApiOperation({
-        summary: "Lấy danh sách tài khoản người dùng"
+        summary: "Lấy danh sách tài khoản người dùng - ADMIN"
     })
     @ApiOkResponse({
         description: "Get all users success",
@@ -37,9 +44,10 @@ export class UserController {
     }
 
     // GET /user/by-email?email=abc@example.com
+    @Roles(["ADMIN"])
     @Get('/by-email')
     @ApiOperation({
-        summary: "Lấy tài khoản người dùng theo email"
+        summary: "Lấy tài khoản người dùng theo email - ADMIN"
     })
     @ApiQuery({
         name: 'email',
@@ -64,12 +72,13 @@ export class UserController {
         )
     }
 
-    @Get(':id')
+    @Roles(["ADMIN"])
+    @Get(':userId')
     @ApiOperation({
-        summary: "Lấy tài khoản người dùng theo id"
+        summary: "Lấy tài khoản người dùng theo id - ADMIN"
     })
     @ApiParam({
-        name: 'id',
+        name: 'userId',
         type: String,
         required: true,
         example: '23965667-5e9a-4c43-9836-8d196a5c6c6f',
@@ -79,10 +88,10 @@ export class UserController {
         description: "Get user by id success",
         type: UserResDto
     })
-    async getById(@Param('id') id: string) {
+    async getById(@Param('userId') userId: string) {
         this.logger.log("Get user by id request received", "At user controller");
 
-        const result = await this.userUseCases.getById(id);
+        const result = await this.userUseCases.getById(userId);
 
         return ApiResponseHelper.success(
             "Get user by id success",
@@ -91,9 +100,10 @@ export class UserController {
         )
     }
 
+    @Roles(["ADMIN"])
     @Post()
     @ApiOperation({
-        summary: "Tạo 1 tài khoản người dùng"
+        summary: "Tạo 1 tài khoản người dùng - CLIENT - ADMIN"
     })
     @ApiBody({
         type: CreateUerReqDto
@@ -115,9 +125,17 @@ export class UserController {
         )
     }
 
-    @Patch(':id')
+    @Roles(["ADMIN", "CLIENT"])
+    @Patch(':userId')
     @ApiOperation({
-        summary: "Cập nhật 1 tài khoản người dùng"
+        summary: "Cập nhật 1 tài khoản người dùng - CLIENT - ADMIN"
+    })
+    @ApiParam({
+        name: 'userId',
+        type: String,
+        required: true,
+        example: '3327cd87-5740-4ff0-a79f-aaec52656ecb',
+        description: 'id của người dùng cần cập nhật'
     })
     @ApiBody({
         type: UpdateUserReqDto
@@ -127,11 +145,11 @@ export class UserController {
         type: UserResDto
     })
     async update(
-        @Param('id') id: string,
+        @Param('userId') userId: string,
         @Body() updateUserDto: UpdateUserReqDto) {
         this.logger.log("Update user request received", "At user controller");
 
-        const result = await this.userUseCases.updateUser(id, updateUserDto);
+        const result = await this.userUseCases.updateUser(userId, updateUserDto);
 
         return ApiResponseHelper.success(
             "Update user success",
@@ -140,18 +158,26 @@ export class UserController {
         )
     }
 
-    @Delete(':id')
+    @Roles(["ADMIN", "CLIENT"])
+    @Delete(':userId')
     @ApiOperation({
-        summary: "Xóa tài khoản người dùng theo id"
+        summary: "Xóa tài khoản người dùng theo id - CLIENT - ADMIN"
+    })
+    @ApiParam({
+        name: 'userId',
+        type: String,
+        required: true,
+        example: '3327cd87-5740-4ff0-a79f-aaec52656ecb',
+        description: 'id của người dùng cần xóa'
     })
     @ApiOkResponse({
         description: "Delete user by id success",
         type: UserResDto
     })
-    async remove(@Param('id') id: string) {
+    async remove(@Param('userId') userId: string) {
         this.logger.log("Delete user request received", "At user controller");
 
-        const result = await this.userUseCases.removeUser(id);
+        const result = await this.userUseCases.removeUser(userId);
 
         return ApiResponseHelper.success(
             "Delete user by id success",

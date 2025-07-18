@@ -24,6 +24,10 @@ import { CreateProductReqDto } from "../dtos/product/CreateProductReqDto";
 import { CreateProductDto } from "lib/domain/dtos/product/CreateProductDto";
 import { UpdateProductReqDto } from "../dtos/product/UpdateProductReqDto";
 import { UpdateProductDto } from "lib/domain/dtos/product/UpdatePriductDto";
+import { CreateSliderReqDto } from "../dtos/slider/CreateSliderReqDto";
+import { CreateSliderDto } from "lib/domain/dtos/slider/CreateSliderDto";
+import { UpdateSliderReqDto } from "../dtos/slider/UpdateSliderReqDto";
+import { UpdateSliderDto } from "lib/domain/dtos/slider/UpdateSliderDto";
 
 export class ReqMapper {
     static LoginMapper(LoginReqDto: LoginReqDto): LoginDto {
@@ -124,6 +128,24 @@ export class ReqMapper {
             description: updateProductReqDto.description,
             storage: updateProductReqDto.storage,
             categoryId: updateProductReqDto.categoryId
+        }
+    }
+
+    static CreateSliderMapper(createSliderReqDto: CreateSliderReqDto): CreateSliderDto {
+        return {
+            title: createSliderReqDto.title,
+            url: createSliderReqDto.url,
+            image: createSliderReqDto.image,
+            adminId: createSliderReqDto.adminId
+        }
+    }
+
+    static UpdateSliderMapper(updateSliderReqDto: UpdateSliderReqDto): UpdateSliderDto {
+        return {
+            title: updateSliderReqDto.title,
+            url: updateSliderReqDto.url,
+            image: updateSliderReqDto.image,
+            adminId: updateSliderReqDto.adminId
         }
     }
 }

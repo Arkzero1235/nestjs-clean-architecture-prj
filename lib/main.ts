@@ -23,7 +23,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Website bán hàng tiện lợi')
-    .setDescription('Các API cho website bán hàng tiện lợi')
+    .setDescription('Các API cho website bán hàng tiện lợi, tài khoản test (Admin): email: admin@example.com, password: test123@@')
     .setVersion('1.0.0')
     .addServer('http://localhost:3333/api/v1')
     .addBearerAuth()

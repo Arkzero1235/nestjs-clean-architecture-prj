@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { CreateOrderDetailDto } from "lib/domain/dtos/order-detail/CreateOrderDetailDto";
 import { CreateOrderDto } from "lib/domain/dtos/order/CreateOrderDto";
-import { UpdateOrderDto } from "lib/domain/dtos/order/UpdateOrderDto";
 import { Order } from "lib/domain/entities/Order.entity";
 import { OrderDetail } from "lib/domain/entities/OrderDetail.entity";
 import { OrderDetailRepository } from "lib/domain/repositories/OrderDetailRepository";
@@ -65,6 +64,14 @@ export class OrderUseCases {
             // Check product storage
             const newQuantity = createOrderDto.quantity + existingOrderDetail.quantity;
 
+            console.log(newQuantity);
+
+            // Validate new quantity 
+            if (newQuantity <= 0) {
+                this.logger.error("There must be at least 1 or more product in an order", undefined, "At create order usecase");
+                throw new BadRequestException("There must be at least 1 or more product in an order");
+            }
+
             const isEnoughStock = existingProduct.storage >= newQuantity;
 
             if (!isEnoughStock) {
@@ -81,6 +88,12 @@ export class OrderUseCases {
             this.logger.log(`Updated quantity for order detail with id ${existingOrderDetail.id} success`, "At create order usecase");
 
         } else {
+            // Validate quantity 
+            if (createOrderDto.quantity <= 0) {
+                this.logger.error("There must be at least 1 or more product to create an order", undefined, "At create order usecase");
+                throw new BadRequestException("There must be at least 1 or more product to create an order");
+            }
+
             // Check product storage
             const isEnoughStock = existingProduct.storage >= createOrderDto.quantity;
 
@@ -117,35 +130,26 @@ export class OrderUseCases {
         return all_order_details;
     }
 
-    // Usecase: cap nhat trang thai order cua userId
-    async update(updateOrderDto: UpdateOrderDto) {
-        // // Validate data
+    // Usecase: cap nhat trang thai order cua userId (giao hang thanh cong)
+    async update(orderId: string) {
+        // Validate data
 
-        // // Check existing user
-        // const existingUser = await this.userRepository.getById(updateOrderDto.userId);
+        // Check existing order
+        const existingOrder = await this.orderRepository.getByIdWithDetails(orderId)
 
-        // // Log error
-        // if (!existingUser) {
-        //     this.logger.error("Cannot found user", undefined, "At update order status usecase");
-        //     throw new NotFoundException("Cannot found user to update order status");
-        // }
+        // Log error
+        if (!existingOrder) {
+            this.logger.error("Cannot found order", undefined, "At update order status usecase");
+            throw new NotFoundException("Cannot found order to update order status");
+        }
 
-        // // Check existing order
-        // const existingOrder = await this.orderRepository.getById(updateOrderDto.id)
+        // Update status
+        const updatedOrder = await this.orderRepository.merge(orderId);
 
-        // // Log error
-        // if (!existingOrder) {
-        //     this.logger.error("Cannot found order", undefined, "At update order status usecase");
-        //     throw new NotFoundException("Cannot found order to update order status");
-        // }
+        // Log result
+        this.logger.log(`Update order status for id ${orderId} success`, "At update order status usecase");
 
-        // // Update status
-        // const updatedOrder = await this.orderRepository.merge(updateOrderDto);
-
-        // // Log result
-        // this.logger.log(`Update order status for userId ${updateOrderDto.userId} success`, "At update order status usecase");
-
-        // return updatedOrder;
+        return updatedOrder;
     }
 
     // Usecase: xoa order cua userId
@@ -157,8 +161,22 @@ export class OrderUseCases {
 
         // Log error
         if (!existingUser) {
-            this.logger.error("Cannot found user", undefined, "At delete order usecase");
+            this.logger.error("Cannot find user", undefined, "At delete order usecase");
             throw new NotFoundException("Cannot found user to delete order");
+        }
+
+        // Check existing & valid order (must be PENDING to DELETE)
+        const canDelOrder = await this.orderRepository.getByIdWithDetails(id);
+
+        // Log error
+        if (!canDelOrder) {
+            this.logger.error("Cannot find order", undefined, "At delete order usecase");
+            throw new NotFoundException("Cannot find order to delete");
+        }
+
+        if (canDelOrder?.status === "SUCCESS") {
+            this.logger.error("The order is successfully completed", undefined, "At delete order usecase");
+            throw new BadRequestException("The order is successfully completed");
         }
 
         // Update status
@@ -179,8 +197,8 @@ export class OrderUseCases {
 
         // Log error
         if (!existingUser) {
-            this.logger.error("Cannot found user", undefined, "At get all orders of user usecase");
-            throw new NotFoundException("Cannot found user to get orders");
+            this.logger.error("Cannot find user", undefined, "At get all orders of user usecase");
+            throw new NotFoundException("Cannot find user to get orders");
         }
 
         // Get orders

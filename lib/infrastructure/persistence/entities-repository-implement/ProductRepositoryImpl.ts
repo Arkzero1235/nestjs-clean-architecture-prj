@@ -31,8 +31,31 @@ export class ProductRepositoryImpl implements ProductRepository {
         }
     }
 
-    merge(updateProductDto: UpdateProductDto): Promise<ProductDto | null> {
-        throw new Error("Method not implemented.");
+    async merge(id: string, updateProductDto: UpdateProductDto): Promise<ProductDto | null> {
+        try {
+            // Filter undefined or null data
+            const data: any = {
+                ...(updateProductDto.name && { name: updateProductDto.name }),
+                ...(updateProductDto.price && { price: updateProductDto.price }),
+                ...(updateProductDto.image && { image: updateProductDto.image }),
+                ...(updateProductDto.stock && { stock: updateProductDto.stock }),
+                ...(updateProductDto.description && { description: updateProductDto.description }),
+                ...(updateProductDto.storage && { storage: updateProductDto.storage }),
+                ...(updateProductDto.categoryId && { categoryId: updateProductDto.categoryId })
+            }
+
+            const updated_result = await this.prismaService.product.update({
+                where: {
+                    id: id
+                },
+                data
+            })
+
+            return updated_result;
+
+        } catch (error) {
+            throw new InternalServerErrorException("Server error")
+        }
     }
 
     async remove(id: string): Promise<ProductDto | null> {

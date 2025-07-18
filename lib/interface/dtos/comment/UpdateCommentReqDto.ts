@@ -1,6 +1,9 @@
-import { IsOptional } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
+import { IsNotEmpty, IsOptional } from "class-validator";
 
 export class UpdateCommentReqDto {
-    @IsOptional()
-    content?: string;
+
+    @ApiProperty({ example: "" })
+    @IsNotEmpty()
+    content: string;
 }

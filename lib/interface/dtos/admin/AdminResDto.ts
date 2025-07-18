@@ -24,4 +24,8 @@ export class AdminResDto {
     @IsNotEmpty()
     @IsPhoneNumber("VN")
     phone: string
+
+    @ApiProperty({ example: "ADMIN" })
+    @IsNotEmpty()
+    role: string
 }

@@ -27,14 +27,14 @@ export class OrderRepositoryImpl implements OrderRepository {
         }
     }
 
-    async merge(updateOrderDto: UpdateOrderDto): Promise<OrderDto | null> {
+    async merge(id: string): Promise<OrderDto | null> {
         try {
             const update_order_result = await this.prismaService.order.update({
                 where: {
-                    id: updateOrderDto.id
+                    id: id
                 },
                 data: {
-                    status: updateOrderDto.status
+                    status: "SUCCESS"
                 }
             })
 
@@ -47,12 +47,9 @@ export class OrderRepositoryImpl implements OrderRepository {
 
     async remove(id: string): Promise<OrderDto | null> {
         try {
-            const delete_order_result = await this.prismaService.order.update({
+            const delete_order_result = await this.prismaService.order.delete({
                 where: {
                     id: id
-                },
-                data: {
-                    status: "CANCEL",
                 },
             })
 
