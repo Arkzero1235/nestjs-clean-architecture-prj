@@ -80,12 +80,6 @@ npm run start:dev
 npx prisma migrate dev
 ```
 
-## 🧪 Testing
-
-```bash
-npm run test
-```
-
 ## ✅ Các chức năng hiện có
 
 - [x] Đăng nhập & đăng ký tài khoản người dùng
