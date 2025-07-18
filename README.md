@@ -34,6 +34,15 @@ lib/
 ```
 
 ## 🚀 Công nghệ sử dụng
+<p align="left">
+  <img src="https://nestjs.com/img/logo-small.svg" alt="NestJS" width="40" height="40" marginRight="40"/>
+  &nbsp;
+  <img src="https://www.postgresql.org/media/img/about/press/elephant.png" alt="PostgreSQL" width="40" height="40" marginRight="40"/>
+  &nbsp;
+  <img src="https://avatars.githubusercontent.com/u/17219288?s=200&v=4" alt="Prisma" width="40" height="40" marginRight="40"/>
+  &nbsp;
+  <img src="https://www.docker.com/wp-content/uploads/2022/03/vertical-logo-monochromatic.png" alt="Docker" width="40" height="40" marginRight="40"/>
+</p>
 
 - [NestJS](https://nestjs.com/)
 - TypeScript
@@ -48,8 +57,8 @@ lib/
 ### 1. Clone dự án
 
 ```bash
-git clone https://github.com/tenban/nestjs-clean-architecture.git
-cd nestjs-clean-architecture
+git clone https://github.com/Arkzero1235/nestjs-clean-architecture-prj.git
+cd nestjs-clean-architecture-prj
 ```
 
 ### 2. Cài đặt package
@@ -64,8 +73,11 @@ Tạo file `.env`:
 
 ```env
 PORT=3000
-DATABASE_URL=postgresql://user:password@localhost:5432/db_name
-JWT_SECRET=your_jwt_secret
+DATABASE_URL_DEL="postgres://user:password@postgres:5432/db_name"
+JWT_ACCESS_SECRET="your_access_secret"
+JWT_REFRESH_SECRET="your_refresh_secret"
+JWT_ACCESS_EXPIRES_IN=30s
+JWT_REFRESH_EXPIRES_IN=7d
 ```
 
 ### 4. Chạy project
@@ -74,11 +86,24 @@ JWT_SECRET=your_jwt_secret
 npm run start:dev
 ```
 
-### 5. Migrate DB (nếu dùng Prisma)
+### 5. Migrate prisma ORM
 
 ```bash
 npx prisma migrate dev
 ```
+
+### 6. Generate prisma seed
+
+```bash
+npx prisma db seed
+```
+
+## 📄 Swagger document
+
+Sau khi chạy server, truy cập:
+
+👉 [http://localhost:3333/api/v1/docs](http://localhost:3333/api/v1/docs)
+
 
 ## ✅ Các chức năng hiện có
 
@@ -86,7 +111,7 @@ npx prisma migrate dev
 - [x] Xác thực JWT (Authentication & Authorization)
 - [x] Quản lý tài khoản người dùng, đơn hàng, giỏ hàng, danh mục, sản phẩm, banner, ...
 
-## 🧠 Kiến trúc Clean
+## 🧠 Kiến trúc Clean Architecture
 
 Clean Architecture giúp:
 
