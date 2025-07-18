@@ -88,6 +88,8 @@ export class CommentRepositoryImpl implements CommentRepository {
                 }
             })
 
+            if (!get_comment_by_id_result) return null;
+
             return ResMapper.mapResponseCommentDto(get_comment_by_id_result);
 
         } catch (error) {

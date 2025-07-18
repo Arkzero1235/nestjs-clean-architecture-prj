@@ -84,6 +84,8 @@ export class SliderRepositoryImpl implements SliderRepository {
                 }
             })
 
+            if (!get_by_id_result) return null;
+
             return get_by_id_result;
 
         } catch (error) {

@@ -95,6 +95,8 @@ export class ProductRepositoryImpl implements ProductRepository {
                 }
             })
 
+            if (!getted_product) return null;
+
             return getted_product;
 
         } catch (error) {
@@ -109,6 +111,8 @@ export class ProductRepositoryImpl implements ProductRepository {
                     name: name
                 }
             })
+
+            if (!getted_product) return null;
 
             return getted_product;
 

@@ -94,6 +94,8 @@ export class OrderRepositoryImpl implements OrderRepository {
                 }
             })
 
+            if (!get_order_by_id_result) return null;
+
             return get_order_by_id_result;
 
         } catch (error) {

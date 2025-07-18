@@ -113,6 +113,11 @@ export class CategoryRepositoryImpl implements CategoryRepository {
                     id: id
                 }
             })
+
+            if (!get_categories_by_id_result) {
+                return null;
+            }
+
             return ResMapper.mapResponseCategoryDto(get_categories_by_id_result);
         } catch (error) {
             throw new InternalServerErrorException("Server error");

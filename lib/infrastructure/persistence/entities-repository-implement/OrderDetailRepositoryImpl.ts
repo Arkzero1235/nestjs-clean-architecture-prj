@@ -59,8 +59,6 @@ export class OrderDetailRepositoryImpl implements OrderDetailRepository {
                 throw new NotFoundException("Không tìm thấy chi tiết đơn hàng");
             }
 
-            console.log(quantity);
-
             const newQuantity = quantity;
             const newTotal = detail.price * newQuantity;
 
@@ -103,7 +101,10 @@ export class OrderDetailRepositoryImpl implements OrderDetailRepository {
                 }
             })
 
+            if (!find_result) return null;
+
             return find_result;
+
         } catch (error) {
             throw new InternalServerErrorException("Server error");
         }
