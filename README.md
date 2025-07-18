@@ -56,9 +56,9 @@ lib/
 
 ### 0. Phần mềm yêu cầu
 
-- **Visual Studio Code** ![VSCode](https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_256,h_256/https://assets.ubuntu.com/v1/034147e9-code_ozwVHSV.png) 
+  - [**VS Code**](https://code.visualstudio.com/download)
 
--  **pgAdmin 4** ![pgAdmin](https://api.nuget.org/v3-flatcontainer/danielcunha.toolkit.postgresql.snakecase/1.1.0/icon)
+  - [**PGAdmin 4**](https://www.pgadmin.org/download/)
 
 ### 1. Clone project
 
