@@ -91,6 +91,7 @@ JWT_REFRESH_EXPIRES_IN=7d
 ```bash
 cd lib/infrastructure/database/prisma-orm
 npx prisma migrate dev
+npx generate prisma
 ```
 
 ### 5. Generate prisma seed 
