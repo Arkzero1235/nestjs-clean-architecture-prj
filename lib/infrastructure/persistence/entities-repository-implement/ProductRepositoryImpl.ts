@@ -69,7 +69,7 @@ export class ProductRepositoryImpl implements ProductRepository {
         }
     }
 
-    async find(): Promise<object | null> {
+    async find(): Promise<object[] | null> {
         try {
             const products = await this.prismaService.product.findMany({
                 include: {
@@ -113,6 +113,26 @@ export class ProductRepositoryImpl implements ProductRepository {
             })
 
             if (!getted_product) return null;
+
+            return getted_product;
+
+        } catch (error) {
+            throw new InternalServerErrorException("Server error")
+        }
+    }
+
+    async getByCategory(categoryId: string): Promise<object[] | null> {
+        try {
+            const getted_product = await this.prismaService.product.findMany({
+                where: {
+                    categoryId: categoryId
+                },
+                include: {
+                    category: true
+                }
+            })
+
+            if (!getted_product) return null
 
             return getted_product;
 

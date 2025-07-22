@@ -102,6 +102,26 @@ export class ProductUseCases {
         return deletedProduct;
     }
 
+    // Usecase: lấy tất cả sản phẩm theo danh mục
+    async findByCategory(categoryId: string) {
+
+        // Check existing category
+        const existingCategory = await this.categoryRepository.getById(categoryId);
+
+        // Log error
+        if (!existingCategory) {
+            this.logger.error(`Cannot find category [${categoryId}]`, undefined, "At get product by category usecase");
+            throw new NotFoundException(`Cannot find category [${categoryId}]`);
+        }
+
+        const productsByCategory = await this.productRepository.getByCategory(categoryId);
+
+        // Log result
+        this.logger.log(`Get all products by category success`, "At get product by category usecase");
+
+        return productsByCategory;
+    }
+
     // Usecase: lấy tất cả sản phẩm
     async find() {
         const allProducts = await this.productRepository.find();

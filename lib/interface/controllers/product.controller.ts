@@ -1,10 +1,10 @@
-import { Body, Controller, Delete, Get, Injectable, Logger, Param, Patch, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Injectable, Logger, Param, ParseUUIDPipe, Patch, Post, Query, UseGuards } from "@nestjs/common";
 import { ProductUseCases } from "lib/use-case/product/product.use-case";
 import { CreateProductReqDto } from "../dtos/product/CreateProductReqDto";
 import { ReqMapper } from "../mappers/ReqMapper";
 import { ApiResponseHelper } from "../helper/response-helper";
 import { UpdateProductReqDto } from "../dtos/product/UpdateProductReqDto";
-import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiOperation, ApiParam } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery } from "@nestjs/swagger";
 import { AuthenticationGuard } from "lib/infrastructure/jwt/authentication.guard";
 import { AuthorizationGuard } from "lib/infrastructure/jwt/authorization.guard";
 import { Roles } from "lib/infrastructure/jwt/roles.decorator";
@@ -81,6 +81,28 @@ export class ProductController {
         const result = await this.productUseCases.remove(id);
         return ApiResponseHelper.success(
             "Delete product success",
+            result,
+            200
+        )
+    }
+
+    @Roles(["ADMIN", "CLIENT"])
+    @Get("/:categoryId")
+    @ApiOperation({
+        summary: "Lấy tất cả sản phẩm có trong db theo danh mục - CLIENT - ADMIN"
+    })
+    @ApiParam({
+        name: 'categoryId',
+        type: String,
+        required: true,
+        example: '5bc5c0c2-c134-473a-b6da-9546521104b5',
+        description: 'id của danh mục cần tìm sản phẩm'
+    })
+    async findByCategory(@Param("categoryId", new ParseUUIDPipe()) categoryId: string) {
+        this.logger.log("Get all products by category request received", "At product controller");
+        const result = await this.productUseCases.findByCategory(categoryId);
+        return ApiResponseHelper.success(
+            "Get all products by category success",
             result,
             200
         )

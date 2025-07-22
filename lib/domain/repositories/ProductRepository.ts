@@ -6,8 +6,9 @@ export abstract class ProductRepository {
     abstract persist(createProductDto: CreateProductDto): Promise<ProductDto | null>;
     abstract merge(id: string, updateProductDto: UpdateProductDto): Promise<ProductDto | null>;
     abstract remove(id: string): Promise<ProductDto | null>;
-    abstract find(): Promise<object | null>;
+    abstract find(): Promise<object[] | null>;
     abstract getById(id: string): Promise<ProductDto | null>;
     abstract getByName(name: string): Promise<ProductDto | null>;
+    abstract getByCategory(categoryId: string): Promise<object[] | null>;
     abstract updateStorage(productId: string, decrement: number): Promise<ProductDto | null>;
 }
