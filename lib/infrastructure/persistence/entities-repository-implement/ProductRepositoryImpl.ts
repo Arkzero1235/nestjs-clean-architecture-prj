@@ -36,11 +36,11 @@ export class ProductRepositoryImpl implements ProductRepository {
             // Filter undefined or null data
             const data: any = {
                 ...(updateProductDto.name && { name: updateProductDto.name }),
-                ...(updateProductDto.price && { price: updateProductDto.price }),
+                ...(updateProductDto.price !== undefined && updateProductDto.price !== null && { price: updateProductDto.price }),
                 ...(updateProductDto.image && { image: updateProductDto.image }),
-                ...(updateProductDto.stock && { stock: updateProductDto.stock }),
+                ...(updateProductDto.stock !== undefined && updateProductDto.stock !== null && { stock: updateProductDto.stock }),
                 ...(updateProductDto.description && { description: updateProductDto.description }),
-                ...(updateProductDto.storage && { storage: updateProductDto.storage }),
+                ...(updateProductDto.storage !== undefined && updateProductDto.storage !== null && updateProductDto.storage >= 1 && { storage: updateProductDto.storage }),
                 ...(updateProductDto.categoryId && { categoryId: updateProductDto.categoryId })
             }
 

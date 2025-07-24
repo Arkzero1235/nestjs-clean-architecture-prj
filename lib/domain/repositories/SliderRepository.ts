@@ -8,4 +8,5 @@ export abstract class SliderRepository {
     abstract remove(id: string): Promise<SliderDto | null>;
     abstract find(): Promise<SliderDto[] | null>;
     abstract getById(id: string): Promise<SliderDto | null>;
+    abstract getByName(title: string): Promise<SliderDto | null>;
 }

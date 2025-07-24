@@ -93,4 +93,21 @@ export class SliderRepositoryImpl implements SliderRepository {
         }
     }
 
+    async getByName(title: string): Promise<SliderDto | null> {
+        try {
+            const get_by_id_result = await this.prismaService.slider.findFirst({
+                where: {
+                    title: title
+                }
+            })
+
+            if (!get_by_id_result) return null;
+
+            return get_by_id_result;
+
+        } catch (error) {
+            throw new InternalServerErrorException("Server error")
+        }
+    }
+
 }

@@ -47,10 +47,13 @@ export class OrderRepositoryImpl implements OrderRepository {
 
     async remove(id: string): Promise<OrderDto | null> {
         try {
-            const delete_order_result = await this.prismaService.order.delete({
+            const delete_order_result = await this.prismaService.order.update({
                 where: {
                     id: id
                 },
+                data: {
+                    status: "CANCEL"
+                }
             })
 
             return ResMapper.mapResponseOrderDto(delete_order_result);
@@ -110,12 +113,12 @@ export class OrderRepositoryImpl implements OrderRepository {
                 include: {
                     details: {
                         include: {
-                            product: true  // Nếu muốn lấy cả thông tin sản phẩm
+                            product: true,
                         }
                     }
                 },
                 orderBy: {
-                    createdAt: 'desc' // Sắp xếp mới nhất trước
+                    createdAt: 'desc'
                 }
             });
 

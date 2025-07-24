@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger"
-import { IsNotEmpty, IsNumber, IsUUID } from "class-validator"
+import { IsNotEmpty, IsNumber, IsUUID, Min } from "class-validator"
 
 export class CreateProductReqDto {
 
@@ -10,6 +10,7 @@ export class CreateProductReqDto {
     @ApiProperty({ example: 50000 })
     @IsNotEmpty()
     @IsNumber()
+    @Min(0)
     price: number
 
     @ApiProperty({ example: "https://zizoou.com/cdn/shop/products/Quan-Baggy-Jean-nam-nu-2b-2-Quan-ong-rong-xanh-classic-ZiZoou-Store.jpg?v=1680283265&width=1946" })
@@ -18,6 +19,7 @@ export class CreateProductReqDto {
 
     @ApiProperty({ example: 20 })
     @IsNotEmpty()
+    @Min(0)
     @IsNumber()
     stock: number
 
@@ -27,6 +29,7 @@ export class CreateProductReqDto {
 
     @ApiProperty({ example: 500 })
     @IsNotEmpty()
+    @Min(0)
     @IsNumber()
     storage: number
 

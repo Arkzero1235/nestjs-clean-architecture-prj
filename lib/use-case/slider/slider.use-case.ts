@@ -26,6 +26,14 @@ export class SliderUseCases {
             throw new NotFoundException("Cannot find admin");
         }
 
+        // Check existing slider & title
+        const existingTitle = await this.sliderRepository.getByName(createSliderDto.title);
+
+        if (existingTitle) {
+            this.logger.error("Slider is already in used", undefined, "At create slider usecase");
+            throw new NotFoundException("Slider is already in used");
+        }
+
         // New instance
         const newInstance = Slider.Create(createSliderDto);
 
@@ -49,6 +57,16 @@ export class SliderUseCases {
         if (!existingAdmin) {
             this.logger.error("Cannot find admin", undefined, "At update slider usecase");
             throw new NotFoundException("Cannot find admin");
+        }
+
+        // Check existing title
+        if (updateSliderDto.title) {
+            const existingTitle = await this.sliderRepository.getByName(updateSliderDto.title);
+
+            if (existingTitle) {
+                this.logger.error("Title is already in used", undefined, "At update slider usecase");
+                throw new NotFoundException("Title is already in used");
+            }
         }
 
         // Update slider

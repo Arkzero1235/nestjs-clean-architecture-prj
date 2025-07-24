@@ -1,5 +1,5 @@
 export class UpdateSliderDto {
-    title?: String;
+    title?: string;
     url?: string;
     image?: string;
     adminId: string;

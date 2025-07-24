@@ -55,6 +55,8 @@ export class UserRepositoryImpl implements UserRepository {
             const data: any = {
                 ...(updateUserDto.username && { userName: updateUserDto.username }),
                 ...(updateUserDto.email && { email: updateUserDto.email }),
+                ...(updateUserDto.address && { address: updateUserDto.address }),
+                ...(updateUserDto.phone && { phone: updateUserDto.phone }),
                 ...(updateUserDto.role && { role: updateUserDto.role }),
             };
 
@@ -184,7 +186,7 @@ export class UserRepositoryImpl implements UserRepository {
         try {
             const get_all_users_result = await this.prismaService.user.findMany();
 
-            if (!get_all_users_result || get_all_users_result.length == 0) {
+            if (!get_all_users_result) {
                 throw new NotFoundException("There is no user")
             }
 

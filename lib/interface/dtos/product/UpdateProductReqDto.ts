@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger"
-import { IsNotEmpty, IsNumber, IsOptional, IsUUID } from "class-validator"
+import { IsNotEmpty, IsNumber, IsOptional, IsUUID, Min } from "class-validator"
 
 export class UpdateProductReqDto {
 
@@ -10,6 +10,7 @@ export class UpdateProductReqDto {
     @ApiProperty({ example: 45000 })
     @IsOptional()
     @IsNumber()
+    @Min(0)
     price?: number
 
     @ApiProperty({ example: "https://cdn.tgdd.vn/hoi-dap/1421017/top-10-mat-kinh-nam-giam-gia-soc-tai-avaji-cac-chang-khong%20(14)-800x596.jpg" })
@@ -19,6 +20,7 @@ export class UpdateProductReqDto {
     @ApiProperty({ example: 0 })
     @IsOptional()
     @IsNumber()
+    @Min(0)
     stock?: number
 
     @ApiProperty({ example: "Mắt kính nam thời trang, sành điệu, gọn nhẹ, bảo hành 1 năm" })
@@ -28,6 +30,7 @@ export class UpdateProductReqDto {
     @ApiProperty({ example: 230 })
     @IsOptional()
     @IsNumber()
+    @Min(1)
     storage?: number
 
     @ApiProperty({ example: "" })
