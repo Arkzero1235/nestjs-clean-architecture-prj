@@ -111,10 +111,20 @@ export class AuthUseCases {
             throw new UnauthorizedException("Missing refresh token | user haven't logined yet");
         }
 
-        const payload = this.iTokenService.verifyRefreshToken(token);
+        let payload: { id: string, name: string, role: string };
+        try {
+            payload = this.iTokenService.verifyRefreshToken(token); // token expired / invalid sẽ ném lỗi ở đây
+        } catch (err) {
+            this.logger.error("Invalid or expired refresh token", err.stack, "At auth usecases");
+            throw new UnauthorizedException("Invalid or expired refresh token");
+        }
 
-        this.logger.log("Renew token success", "At auth usecases")
+        this.logger.log("Renew token success", "At auth usecases");
 
-        return this.iTokenService.generateAccessToken({ payload });
+        return this.iTokenService.generateAccessToken({
+            id: payload.id,
+            name: payload.name,
+            role: payload.role
+        });
     }
 }
