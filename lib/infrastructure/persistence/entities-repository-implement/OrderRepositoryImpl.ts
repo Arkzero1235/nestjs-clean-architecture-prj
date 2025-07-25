@@ -128,4 +128,54 @@ export class OrderRepositoryImpl implements OrderRepository {
             throw new InternalServerErrorException("Server error");
         }
     }
+
+    async getRevenuePerDay() {
+        try {
+            const result = await this.prismaService.$queryRawUnsafe(`
+      SELECT 
+        TO_CHAR("createdAt", 'YYYY-MM-DD') as date,
+        SUM("total") as "totalRevenue"
+      FROM "Order"
+      WHERE status = 'SUCCESS'
+      GROUP BY date
+      ORDER BY date ASC;
+    `);
+
+            return result;
+        } catch (error) {
+            throw new InternalServerErrorException("Server error");
+        }
+    }
+
+    async getDashboardStats() {
+        try {
+            const [
+                totalProducts,
+                totalUsers,
+                totalCategories,
+                totalSuccessfulOrders,
+                totalSliders,
+            ] = await Promise.all([
+                this.prismaService.product.count(),
+                this.prismaService.user.count(),
+                this.prismaService.category.count(),
+                this.prismaService.order.count({
+                    where: {
+                        status: 'SUCCESS',
+                    },
+                }),
+                this.prismaService.slider.count(),
+            ]);
+
+            return {
+                totalProducts,
+                totalUsers,
+                totalCategories,
+                totalSuccessfulOrders,
+                totalSliders,
+            };
+        } catch (error) {
+            throw new InternalServerErrorException("Server error");
+        }
+    }
 }

@@ -19,6 +19,40 @@ export class OrderController {
         private readonly logger: Logger
     ) { }
 
+    @Roles(["ADMIN"])
+    @Get("/revenue")
+    @ApiOperation({
+        summary: "Lấy doanh thu theo tuần - ADMIN"
+    })
+    async revenue() {
+        this.logger.log("Get revenue request received", "At order controller");
+
+        const result = await this.orderUseCases.revenue();
+
+        return ApiResponseHelper.success(
+            `Get revenue success`,
+            result,
+            200
+        )
+    }
+
+    @Roles(["ADMIN"])
+    @Get("/sum")
+    @ApiOperation({
+        summary: "Lấy tổng số lượng DB - ADMIN"
+    })
+    async sum() {
+        this.logger.log("Get sum db request received", "At order controller");
+
+        const result = await this.orderUseCases.sumData();
+
+        return ApiResponseHelper.success(
+            `Get sum db success`,
+            result,
+            200
+        )
+    }
+
     @Roles(["ADMIN", "CLIENT"])
     @Get("/:userId")
     @ApiOperation({

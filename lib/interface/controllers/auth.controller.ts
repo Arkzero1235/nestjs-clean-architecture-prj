@@ -177,8 +177,12 @@ export class AuthController {
     async logout(@Res({ passthrough: true }) res: Response) {
         this.logger.log("Logout request received", "At auth controller");
 
-        res.clearCookie('re_tkn');
-
+        res.clearCookie('re_tkn', {
+            path: '/',              // Quan trọng!
+            httpOnly: true,         // Cookie đang có
+            secure: false,
+            sameSite: 'lax'
+        });
         const message = await this.authUseCase.logout();
 
         return ApiResponseHelper.success(

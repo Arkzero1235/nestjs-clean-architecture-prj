@@ -209,4 +209,14 @@ export class OrderUseCases {
 
         return gettedOrders;
     }
+
+    // Usecase: Thống kê doanh thu theo tuần
+    async revenue() {
+        return this.orderRepository.getRevenuePerDay();
+    }
+
+    // Usecase: Lấy sum db
+    async sumData() {
+        return this.orderRepository.getDashboardStats();
+    }
 }

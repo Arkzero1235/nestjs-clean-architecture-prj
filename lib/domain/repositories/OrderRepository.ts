@@ -9,4 +9,6 @@ export abstract class OrderRepository {
     abstract getByIdWithDetails(orderId: string): Promise<OrderDto | null>;
     abstract getPendingOrder(userId: string): Promise<OrderDto | null>;
     abstract find(userId: string): Promise<object | null>;
+    abstract getRevenuePerDay(): any;
+    abstract getDashboardStats(): any;
 }
