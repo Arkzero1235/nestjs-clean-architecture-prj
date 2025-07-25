@@ -30,7 +30,7 @@ import { SliderModule } from './use-case/slider/slider.module';
     ProductModule,
     SliderModule
   ],
-  controllers: [AppController, AuthController],
+  controllers: [AppController],
   providers: [
     AppService,
     {

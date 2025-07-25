@@ -90,7 +90,7 @@ export class AuthUseCases {
             this.logger.log("Login admin success", "At auth usecases");
         }
 
-        return { id: admin.id, accessToken, refreshToken }
+        return { id: admin.id, name: admin.name, accessToken, refreshToken }
     }
 
     // Usecase: Đăng xuất

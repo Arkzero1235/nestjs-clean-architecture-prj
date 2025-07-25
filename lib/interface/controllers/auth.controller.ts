@@ -1,15 +1,17 @@
-import { Body, Controller, Get, Logger, Post, Req, Res } from "@nestjs/common";
+import { Body, Controller, Get, Injectable, Logger, Post, Req, Res, UseGuards } from "@nestjs/common";
 import { AuthUseCases } from "lib/use-case/auth/auth.use-case";
 import { LoginReqDto } from "../dtos/LoginReqDto";
 import { ReqMapper } from "../mappers/ReqMapper";
 import { ApiResponseHelper } from "../helper/response-helper";
 import { Response, Request } from 'express';
-import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation } from "@nestjs/swagger";
 import { CreateUerReqDto } from "../dtos/user/CreateUserReqDto";
 import { UserResDto } from "../dtos/user/UserResDto";
 import { UserUseCases } from "lib/use-case/user/user.use-case";
+import { AuthenticationGuard } from "lib/infrastructure/jwt/authentication.guard";
 
 @Controller('/auth')
+@Injectable()
 export class AuthController {
     constructor(
         private authUseCase: AuthUseCases,
@@ -92,7 +94,7 @@ export class AuthController {
 
         const mapLoginData = ReqMapper.LoginMapper(loginReqDto);
 
-        const { id, accessToken, refreshToken } = await this.authUseCase.loginAdmin(mapLoginData);
+        const { id, name, accessToken, refreshToken } = await this.authUseCase.loginAdmin(mapLoginData);
 
         res.cookie('re_tkn', refreshToken, {
             httpOnly: true,
@@ -105,6 +107,7 @@ export class AuthController {
             "Login successed",
             {
                 sub: id,
+                name: name,
                 token: accessToken
             },
             201
@@ -181,6 +184,37 @@ export class AuthController {
             message,
             {},
             201
+        )
+    }
+
+    @UseGuards(AuthenticationGuard)
+    @ApiBearerAuth()
+    @Post('profile')
+    @ApiOperation({
+        summary: "Kiểm tra đăng nhập - CLIENT - ADMIN"
+    })
+    @ApiOkResponse({
+        description: "Check login success",
+        schema: {
+            type: "object",
+            properties: {}
+        }
+    })
+    async profile(@Req() req: Request) {
+        this.logger.log("Check login request received", "At auth controller");
+
+        const user: any = req?.user;
+
+        if (!user) {
+            this.logger.error("Check login failed", undefined, "At auth controller");
+        }
+
+        const result = await this.userUseCases.getById(user.id);
+
+        return ApiResponseHelper.success(
+            "Check login success",
+            result,
+            200
         )
     }
 }

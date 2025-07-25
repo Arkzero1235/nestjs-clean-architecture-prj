@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
     constructor(
-        private readonly logger: Logger,
+        private readonly logger: Logger,    
         private readonly jwtService: JwtService
     ) { }
 
