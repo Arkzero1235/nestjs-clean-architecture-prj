@@ -1,4 +1,5 @@
 import { Inject, Injectable, Logger, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { time } from "console";
 import { LoginDto } from "lib/domain/dtos/user/LoginDto";
 import { AdminRepository } from "lib/domain/repositories/AdminRepository";
 import { AuthRepository } from "lib/domain/repositories/AuthRepository";
@@ -46,12 +47,14 @@ export class AuthUseCases {
 
         const refreshToken = this.iTokenService.generateRefreshToken(payload);
 
+        const time: any = process.env.JWT_ACCESS_EXPIRES_IN;
+
         // Log result
         if (accessToken && refreshToken && isValid) {
             this.logger.log("Login success", "At auth usecases");
         }
 
-        return { id: user.id, accessToken, refreshToken }
+        return { id: user.id, time: time, username: user.username, accessToken, refreshToken }
     }
 
     // Usecase: Đăng nhập admin
@@ -85,12 +88,14 @@ export class AuthUseCases {
 
         const refreshToken = this.iTokenService.generateRefreshToken(payload);
 
+        const time: any = process.env.JWT_ACCESS_EXPIRES_IN;
+
         // Log result
         if (accessToken && refreshToken && isValid) {
             this.logger.log("Login admin success", "At auth usecases");
         }
 
-        return { id: admin.id, name: admin.name, accessToken, refreshToken }
+        return { id: admin.id, time: time, name: admin.name, accessToken, refreshToken }
     }
 
     // Usecase: Đăng xuất

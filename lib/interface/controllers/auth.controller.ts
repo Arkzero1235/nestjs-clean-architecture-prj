@@ -47,12 +47,11 @@ export class AuthController {
 
         const mapLoginData = ReqMapper.LoginMapper(loginReqDto);
 
-        const { id, accessToken, refreshToken } = await this.authUseCase.login(mapLoginData);
+        const { id, username, time, accessToken, refreshToken } = await this.authUseCase.login(mapLoginData);
 
         res.cookie('re_tkn', refreshToken, {
             httpOnly: true,
             secure: false,
-            sameSite: 'strict',
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 ngày
         })
 
@@ -60,6 +59,8 @@ export class AuthController {
             "Login successed",
             {
                 sub: id,
+                username: username,
+                time: time,
                 token: accessToken
             },
             201
@@ -94,12 +95,11 @@ export class AuthController {
 
         const mapLoginData = ReqMapper.LoginMapper(loginReqDto);
 
-        const { id, name, accessToken, refreshToken } = await this.authUseCase.loginAdmin(mapLoginData);
+        const { id, name, time, accessToken, refreshToken } = await this.authUseCase.loginAdmin(mapLoginData);
 
         res.cookie('re_tkn', refreshToken, {
             httpOnly: true,
             secure: false,
-            sameSite: 'strict',
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 ngày
         })
 
@@ -108,6 +108,7 @@ export class AuthController {
             {
                 sub: id,
                 name: name,
+                time: time,
                 token: accessToken
             },
             201

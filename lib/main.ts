@@ -19,7 +19,12 @@ async function bootstrap() {
 
   app.use(cookieParser());
 
-  app.enableCors();
+  app.enableCors({
+    origin: (origin, callback) => {
+      callback(null, true);
+    },
+    credentials: true
+  });
 
   const config = new DocumentBuilder()
     .setTitle('Website bán hàng tiện lợi')
