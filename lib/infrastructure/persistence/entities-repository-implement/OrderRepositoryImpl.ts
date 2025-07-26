@@ -154,6 +154,7 @@ export class OrderRepositoryImpl implements OrderRepository {
                 totalUsers,
                 totalCategories,
                 totalSuccessfulOrders,
+                totalCancelledOrders,
                 totalSliders,
             ] = await Promise.all([
                 this.prismaService.product.count(),
@@ -164,6 +165,11 @@ export class OrderRepositoryImpl implements OrderRepository {
                         status: 'SUCCESS',
                     },
                 }),
+                this.prismaService.order.count({
+                    where: {
+                        status: 'CANCEL',
+                    },
+                }),
                 this.prismaService.slider.count(),
             ]);
 
@@ -172,6 +178,7 @@ export class OrderRepositoryImpl implements OrderRepository {
                 totalUsers,
                 totalCategories,
                 totalSuccessfulOrders,
+                totalCancelledOrders,
                 totalSliders,
             };
         } catch (error) {

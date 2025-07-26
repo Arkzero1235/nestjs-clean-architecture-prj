@@ -47,6 +47,15 @@ export class CategoryUseCases {
             throw new ConflictException("Cannot find category");
         }
 
+        // Check exist category name
+        const existingCategoryName = await this.categoryRepository.getByName(updateCategoryDto.name);
+
+        // Log error
+        if (existingCategoryName) {
+            this.logger.error("Category name is already in used", undefined, "At update category usecase");
+            throw new ConflictException("Category name is already in used");
+        }
+
         // Update category
         const updatedCategory = await this.categoryRepository.merge(id, updateCategoryDto);
 

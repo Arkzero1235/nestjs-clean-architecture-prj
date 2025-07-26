@@ -66,6 +66,7 @@ export class CategoryRepositoryImpl implements CategoryRepository {
             return ResMapper.mapResponseCategoryDto(delete_category_result);
 
         } catch (error) {
+            console.log(error.message);
             throw new InternalServerErrorException("Server error");
         }
     }
