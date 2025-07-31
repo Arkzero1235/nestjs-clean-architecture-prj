@@ -122,6 +122,24 @@ export class ProductUseCases {
         return productsByCategory;
     }
 
+    // Usecase: lấy tất cả sản phẩm theo id
+    async findById(id: string) {
+
+        // Check existing category
+        const existingProduct = await this.productRepository.getById(id);
+
+        // Log error
+        if (!existingProduct) {
+            this.logger.error(`Cannot find product`, undefined, "At get product by id usecase");
+            throw new NotFoundException(`Cannot find product`);
+        }
+
+        // Log result
+        this.logger.log(`Get product by id`, "At get product by id usecase");
+
+        return existingProduct;
+    }
+
     // Usecase: lấy tất cả sản phẩm
     async find() {
         const allProducts = await this.productRepository.find();

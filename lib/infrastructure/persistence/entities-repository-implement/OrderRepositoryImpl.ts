@@ -10,6 +10,28 @@ import { ResMapper } from "lib/interface/mappers/ResMapper";
 export class OrderRepositoryImpl implements OrderRepository {
     constructor(private readonly prismaService: PrismaService) { }
 
+    async findAll(): Promise<object[] | null> {
+        try {
+            const getted_order = await this.prismaService.order.findMany({
+                include: {
+                    details: {
+                        include: {
+                            product: true,
+                        }
+                    }
+                },
+                orderBy: {
+                    createdAt: 'desc'
+                }
+            })
+
+            return getted_order;
+
+        } catch (error) {
+            throw new InternalServerErrorException("Server error");
+        }
+    }
+
     async persist(createOrderDto: CreateOrderDto): Promise<OrderDto | null> {
         try {
             const create_order_result = await this.prismaService.order.create({
@@ -27,14 +49,14 @@ export class OrderRepositoryImpl implements OrderRepository {
         }
     }
 
-    async merge(id: string): Promise<OrderDto | null> {
+    async merge(id: string, status: string): Promise<OrderDto | null> {
         try {
             const update_order_result = await this.prismaService.order.update({
                 where: {
                     id: id
                 },
                 data: {
-                    status: "SUCCESS"
+                    status: status
                 }
             })
 

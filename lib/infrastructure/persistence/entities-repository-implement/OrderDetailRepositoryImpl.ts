@@ -31,7 +31,8 @@ export class OrderDetailRepositoryImpl implements OrderDetailRepository {
 
     async persist(createOrderDetailDto: CreateOrderDetailDto, price: number, stock: number): Promise<OrderDetailDto | null> {
         try {
-            const total = price * stock;
+            const total = price * createOrderDetailDto.quantity;
+
             const created_order_detail = await this.prismaService.orderDetail.create({
                 data: {
                     orderId: createOrderDetailDto.orderId,
@@ -88,8 +89,41 @@ export class OrderDetailRepositoryImpl implements OrderDetailRepository {
         }
     }
 
-    remove(id: string): Promise<OrderDetailDto | null> {
-        throw new Error("Method not implemented.");
+    async remove(id: string): Promise<OrderDetailDto | null> {
+        try {
+            const removed_product = await this.prismaService.orderDetail.delete({
+                where: { id },
+            });
+
+            const details = await this.prismaService.orderDetail.findMany({
+                where: { orderId: removed_product.orderId },
+                select: { total: true },
+            });
+
+            // Tính tổng tiền từ các chi tiết đơn hàng
+            const total = details.reduce((sum, item) => sum + item.total, 0);
+
+            // Cập nhật total cho bảng Order
+            await this.prismaService.order.update({
+                where: { id: removed_product.orderId },
+                data: { total },
+            });
+
+            // Cập nhật lại số lượng kho
+            await this.prismaService.product.update({
+                where: { id: removed_product.productId },
+                data: {
+                    storage: {
+                        increment: removed_product.quantity, // trả lại số lượng vào kho
+                    },
+                },
+            });
+
+            return removed_product;
+
+        } catch (error) {
+            throw new InternalServerErrorException("Server error")
+        }
     }
 
     async get(orderId: string, productId: string): Promise<OrderDetailDto | null> {
@@ -99,6 +133,21 @@ export class OrderDetailRepositoryImpl implements OrderDetailRepository {
                     orderId: orderId,
                     productId: productId
                 }
+            })
+
+            if (!find_result) return null;
+
+            return find_result;
+
+        } catch (error) {
+            throw new InternalServerErrorException("Server error");
+        }
+    }
+
+    async getById(id: string): Promise<OrderDetailDto | null> {
+        try {
+            const find_result = await this.prismaService.orderDetail.findFirst({
+                where: { id }
             })
 
             if (!find_result) return null;

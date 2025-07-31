@@ -83,6 +83,7 @@ export class ProductRepositoryImpl implements ProductRepository {
             return products;
 
         } catch (error) {
+            console.log("LOI LA: ", error);
             throw new InternalServerErrorException("Cannot retrieve product list");
         }
     }

@@ -64,7 +64,7 @@ export class OrderUseCases {
             // Check product storage
             const newQuantity = createOrderDto.quantity + existingOrderDetail.quantity;
 
-            console.log(newQuantity);
+            // console.log(newQuantity);
 
             // Validate new quantity 
             if (newQuantity <= 0) {
@@ -144,7 +144,51 @@ export class OrderUseCases {
         }
 
         // Update status
-        const updatedOrder = await this.orderRepository.merge(orderId);
+        const updatedOrder = await this.orderRepository.merge(orderId, "SUCCESS");
+
+        // Log result
+        this.logger.log(`Update order status for id ${orderId} success`, "At update order status usecase");
+
+        return updatedOrder;
+    }
+
+    // Usecase: cap nhat trang thai order cua userId (dua vao danh sach do nhang can duyet)
+    async updateProcess(orderId: string) {
+        // Validate data
+
+        // Check existing order
+        const existingOrder = await this.orderRepository.getByIdWithDetails(orderId)
+
+        // Log error
+        if (!existingOrder) {
+            this.logger.error("Cannot found order", undefined, "At update order status usecase");
+            throw new NotFoundException("Cannot found order to update order status");
+        }
+
+        // Update status
+        const updatedOrder = await this.orderRepository.merge(orderId, "IN PROCESS");
+
+        // Log result
+        this.logger.log(`Update order status for id ${orderId} success`, "At update order status usecase");
+
+        return updatedOrder;
+    }
+
+    // Usecase: cap nhat trang thai order cua userId (don hang dang duoc van chuyen)
+    async updateDelivery(orderId: string) {
+        // Validate data
+
+        // Check existing order
+        const existingOrder = await this.orderRepository.getByIdWithDetails(orderId)
+
+        // Log error
+        if (!existingOrder) {
+            this.logger.error("Cannot found order", undefined, "At update order status usecase");
+            throw new NotFoundException("Cannot found order to update order status");
+        }
+
+        // Update status
+        const updatedOrder = await this.orderRepository.merge(orderId, "ON DELIVERY");
 
         // Log result
         this.logger.log(`Update order status for id ${orderId} success`, "At update order status usecase");
@@ -153,17 +197,8 @@ export class OrderUseCases {
     }
 
     // Usecase: xoa order cua userId
-    async remove(id: string, userId: string) {
+    async remove(id: string) {
         // Validate data
-
-        // Check existing user
-        const existingUser = await this.userRepository.getById(userId);
-
-        // Log error
-        if (!existingUser) {
-            this.logger.error("Cannot find user", undefined, "At delete order usecase");
-            throw new NotFoundException("Cannot found user to delete order");
-        }
 
         // Check existing & valid order (must be PENDING to DELETE)
         const canDelOrder = await this.orderRepository.getByIdWithDetails(id);
@@ -183,9 +218,30 @@ export class OrderUseCases {
         const deletedOrder = await this.orderRepository.remove(id);
 
         // Log result
-        this.logger.log(`Delete order for userId ${userId} success`, "At delete order usecase");
+        this.logger.log(`Delete order success`, "At delete order usecase");
 
         return deletedOrder;
+    }
+
+    // Usecase: xoa 1 san pham cua gio hang
+    async removeProduct(id: string) {
+        // Validate data
+
+        // Check existing product
+        const existingDetails = await this.orderDetailRepository.getById(id);
+
+        if (!existingDetails) {
+            this.logger.error("Cannot find product detail", undefined, "At delete order product usecase");
+            throw new NotFoundException("Cannot find product detail");
+        }
+
+        // Update status
+        const deletedProduct = await this.orderDetailRepository.remove(id);
+
+        // Log result
+        this.logger.log(`Delete product of order success`, "At delete order product usecase");
+
+        return deletedProduct;
     }
 
     // Usecase: lay tat ca orders theo userId
@@ -208,6 +264,36 @@ export class OrderUseCases {
         this.logger.log(`Get all orders for userId ${userId} success`, "At get all orders of user usecase");
 
         return gettedOrders;
+    }
+
+    // Usecase: lay danh sach don hang
+    async findAll() {
+
+        const gettedOrders = await this.orderRepository.findAll()
+
+        // Log result
+        this.logger.log(`Get all orders success`, "At get all orders of user usecase");
+
+        return gettedOrders;
+    }
+
+    // Usecase: lay order theo id
+    async getOrder(id: string) {
+        // Validate data
+
+        // Check existing order
+        const existingOrder = await this.orderRepository.getByIdWithDetails(id)
+
+        // Log error
+        if (!existingOrder) {
+            this.logger.error("Cannot find order", undefined, "At get order by id usecase");
+            throw new NotFoundException("Cannot find order");
+        }
+
+        // Log result
+        this.logger.log(`Get order success`, "At get all orders of user usecase");
+
+        return existingOrder;
     }
 
     // Usecase: Thống kê doanh thu theo tuần

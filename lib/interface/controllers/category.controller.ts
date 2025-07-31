@@ -11,7 +11,6 @@ import { AuthorizationGuard } from "lib/infrastructure/jwt/authorization.guard";
 import { Roles } from "lib/infrastructure/jwt/roles.decorator";
 
 @Injectable()
-@UseGuards(AuthenticationGuard, AuthorizationGuard)
 @ApiBearerAuth()
 @Controller("/category")
 export class CategoryController {
@@ -20,6 +19,7 @@ export class CategoryController {
         private readonly logger: Logger
     ) { }
 
+    @UseGuards(AuthenticationGuard, AuthorizationGuard)
     @Roles(["ADMIN"])
     @Post()
     @ApiOperation({
@@ -43,6 +43,7 @@ export class CategoryController {
         )
     }
 
+    @UseGuards(AuthenticationGuard, AuthorizationGuard)
     @Roles(["ADMIN"])
     @Patch("/:id")
     @ApiOperation({
@@ -73,6 +74,7 @@ export class CategoryController {
         )
     }
 
+    @UseGuards(AuthenticationGuard, AuthorizationGuard)
     @Roles(["ADMIN"])
     @Delete("/:id")
     @ApiOperation({
@@ -99,7 +101,6 @@ export class CategoryController {
         )
     }
 
-    @Roles(["ADMIN", "CLIENT"])
     @Get()
     @ApiOperation({
         summary: "Lấy tất cả danh mục - CLIENT - ADMIN"

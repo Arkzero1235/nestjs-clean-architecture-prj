@@ -10,7 +10,6 @@ import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam } from "@nestjs/swagger"
 import { Roles } from "lib/infrastructure/jwt/roles.decorator";
 
 @Injectable()
-@UseGuards(AuthenticationGuard, AuthorizationGuard)
 @ApiBearerAuth()
 @Controller("/slider")
 export class SliderController {
@@ -19,6 +18,7 @@ export class SliderController {
         private readonly logger: Logger
     ) { }
 
+    @UseGuards(AuthenticationGuard, AuthorizationGuard)
     @Roles(["ADMIN"])
     @Post()
     @ApiOperation({
@@ -38,6 +38,7 @@ export class SliderController {
         )
     }
 
+    @UseGuards(AuthenticationGuard, AuthorizationGuard)
     @Roles(["ADMIN"])
     @Patch("/:id")
     @ApiOperation({
@@ -64,6 +65,7 @@ export class SliderController {
         )
     }
 
+    @UseGuards(AuthenticationGuard, AuthorizationGuard)
     @Roles(["ADMIN"])
     @Delete("/:id")
     @ApiOperation({
@@ -86,7 +88,6 @@ export class SliderController {
         )
     }
 
-    @Roles(["ADMIN", "CLIENT"])
     @Get()
     @ApiOperation({
         summary: "Lấy tất cả sliders có trong db - CLIENT - ADMIN"

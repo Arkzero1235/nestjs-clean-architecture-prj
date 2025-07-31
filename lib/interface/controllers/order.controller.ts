@@ -20,6 +20,23 @@ export class OrderController {
     ) { }
 
     @Roles(["ADMIN"])
+    @Get()
+    @ApiOperation({
+        summary: "Lấy danh sách đơn hàng - ADMIN"
+    })
+    async allPending() {
+        this.logger.log("Get orders request received", "At order controller");
+
+        const result = await this.orderUseCases.findAll();
+
+        return ApiResponseHelper.success(
+            `Get ordes success`,
+            result,
+            200
+        )
+    }
+
+    @Roles(["ADMIN"])
     @Get("/revenue")
     @ApiOperation({
         summary: "Lấy doanh thu theo tuần - ADMIN"
@@ -75,6 +92,28 @@ export class OrderController {
         )
     }
 
+    @Roles(["ADMIN", "CLIENT"])
+    @Get("order/:id")
+    @ApiOperation({
+        summary: "Lấy giỏ hàng theo id - CLIENT - ADMIN"
+    })
+    @ApiParam({
+        name: 'id',
+        type: String,
+        required: true,
+        example: '2d011518-d44f-4957-975c-54fdf88f28a8',
+        description: 'id của giỏ hàng'
+    })
+    async getOrder(@Param("id") id: string) {
+        this.logger.log("Ge order by id request received", "At order controller");
+        const result = await this.orderUseCases.getOrder(id)
+        return ApiResponseHelper.success(
+            `Get order success`,
+            result,
+            200
+        )
+    }
+
     @Roles(["CLIENT"])
     @Post()
     @ApiOperation({
@@ -120,8 +159,80 @@ export class OrderController {
         )
     }
 
+    @Roles(["CLIENT"])
+    @Patch("process/:id")
+    @ApiOperation({
+        summary: "Cập nhật trạng thái đơn hàng IN PROCESS - CLIENT - ADMIN",
+    })
+    @ApiParam({
+        name: 'id',
+        type: String,
+        required: true,
+        example: '3327cd87-5740-4ff0-a79f-aaec52656ecb',
+        description: 'id của giỏ hàng cần cập nhật'
+    })
+    @ApiBody({
+        type: UpdateOrderReqDto
+    })
+    async updateProcess(@Param("id") id: string) {
+        this.logger.log("Update order request received", "At order controller");
+        const result = await this.orderUseCases.updateProcess(id);
+        return ApiResponseHelper.success(
+            `Update order status for id ${id} success`,
+            result,
+            201
+        )
+    }
+
+    @Roles(["ADMIN"])
+    @Patch("delivery/:id")
+    @ApiOperation({
+        summary: "Cập nhật trạng thái đơn hàng ON DELIVERY - CLIENT - ADMIN",
+    })
+    @ApiParam({
+        name: 'id',
+        type: String,
+        required: true,
+        example: '3327cd87-5740-4ff0-a79f-aaec52656ecb',
+        description: 'id của giỏ hàng cần cập nhật'
+    })
+    @ApiBody({
+        type: UpdateOrderReqDto
+    })
+    async updateDelivery(@Param("id") id: string) {
+        this.logger.log("Update order request received", "At order controller");
+        const result = await this.orderUseCases.updateDelivery(id);
+        return ApiResponseHelper.success(
+            `Update order status for id ${id} success`,
+            result,
+            201
+        )
+    }
+
     @Roles(["ADMIN", "CLIENT"])
-    @Delete(":userId/:id")
+    @Delete("product/:id")
+    @ApiOperation({
+        summary: "Xóa 1 sản phẩm khoi giở hàng - CLIENT - ADMIN",
+    })
+    @ApiParam({
+        name: 'id',
+        type: String,
+        required: true,
+        example: '3327cd87-5740-4ff0-a79f-aaec52656ecb',
+        description: 'id của order detail chứa sản phẩm can xóa'
+    })
+    async removeProduct(@Param("id") id: string) {
+        this.logger.log("Delete product in order request received", "At order controller");
+        const result = await this.orderUseCases.removeProduct(id);
+        return ApiResponseHelper.success(
+            `Delete product success`,
+            result,
+            200
+        )
+    }
+
+    @Roles(["ADMIN", "CLIENT"])
+    @Delete("/:id")
     @ApiOperation({
         summary: "Cập nhật trạng thái đơn hàng bị hủy (Soft Delete) - CLIENT - ADMIN",
         description: "Trạng thái (status) của đơn hàng được đặt là CANCEL khi người dùng hoặc admin hủy đơn hàng hoặc có sự cố trong quá trình vận chuyển"
@@ -131,13 +242,13 @@ export class OrderController {
         type: String,
         required: true,
         example: '3327cd87-5740-4ff0-a79f-aaec52656ecb',
-        description: 'id của người dùng cần xóa'
+        description: 'id của đơn hàng cần xóa'
     })
-    async remove(@Param("id") id: string, @Param("userId") userId: string) {
+    async remove(@Param("id") id: string) {
         this.logger.log("Delete order request received", "At order controller");
-        const result = await this.orderUseCases.remove(id, userId);
+        const result = await this.orderUseCases.remove(id);
         return ApiResponseHelper.success(
-            `Delete order ${id} of userId ${userId} success`,
+            `Delete order ${id} success`,
             result,
             200
         )

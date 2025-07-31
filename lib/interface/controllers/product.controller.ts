@@ -10,7 +10,6 @@ import { AuthorizationGuard } from "lib/infrastructure/jwt/authorization.guard";
 import { Roles } from "lib/infrastructure/jwt/roles.decorator";
 
 @Injectable()
-@UseGuards(AuthenticationGuard, AuthorizationGuard)
 @ApiBearerAuth()
 @Controller("/product")
 export class ProductController {
@@ -19,6 +18,7 @@ export class ProductController {
         private readonly logger: Logger
     ) { }
 
+    @UseGuards(AuthenticationGuard, AuthorizationGuard)
     @Roles(["ADMIN"])
     @Post()
     @ApiOperation({
@@ -38,6 +38,7 @@ export class ProductController {
         )
     }
 
+    @UseGuards(AuthenticationGuard, AuthorizationGuard)
     @Roles(["ADMIN"])
     @Patch("/:id")
     @ApiOperation({
@@ -64,6 +65,7 @@ export class ProductController {
         )
     }
 
+    @UseGuards(AuthenticationGuard, AuthorizationGuard)
     @Roles(["ADMIN"])
     @Delete("/:id")
     @ApiOperation({
@@ -86,6 +88,28 @@ export class ProductController {
         )
     }
 
+    @Get("/:id")
+    @ApiOperation({
+        summary: "Lấy tất cả sản phẩm có trong db theo id - CLIENT - ADMIN"
+    })
+    @ApiParam({
+        name: 'id',
+        type: String,
+        required: true,
+        example: '5bc5c0c2-c134-473a-b6da-9546521104b5',
+        description: 'id của sản phẩm cần tìm sản phẩm'
+    })
+    async findById(@Param("id", new ParseUUIDPipe()) id: string) {
+        this.logger.log("Get product by id request received", "At product controller");
+        const result = await this.productUseCases.findById(id);
+        return ApiResponseHelper.success(
+            "Get product by id success",
+            result,
+            200
+        )
+    }
+
+    @UseGuards(AuthenticationGuard, AuthorizationGuard)
     @Roles(["ADMIN", "CLIENT"])
     @Get("/:categoryId")
     @ApiOperation({
@@ -108,7 +132,6 @@ export class ProductController {
         )
     }
 
-    @Roles(["ADMIN", "CLIENT"])
     @Get()
     @ApiOperation({
         summary: "Lấy tất cả sản phẩm có trong db - CLIENT - ADMIN"
