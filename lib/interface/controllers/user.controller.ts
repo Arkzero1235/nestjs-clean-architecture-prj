@@ -75,7 +75,7 @@ export class UserController {
     @Roles(["ADMIN", "CLIENT"])
     @Get(':userId')
     @ApiOperation({
-        summary: "Lấy tài khoản người dùng theo id - ADMIN"
+        summary: "Lấy tài khoản người dùng theo id - CLIENT - ADMIN"
     })
     @ApiParam({
         name: 'userId',

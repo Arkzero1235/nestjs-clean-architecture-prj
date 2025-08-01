@@ -184,7 +184,7 @@ export class OrderController {
         )
     }
 
-    @Roles(["ADMIN"])
+    @Roles(["ADMIN", "CLIENT"])
     @Patch("delivery/:id")
     @ApiOperation({
         summary: "Cập nhật trạng thái đơn hàng ON DELIVERY - CLIENT - ADMIN",

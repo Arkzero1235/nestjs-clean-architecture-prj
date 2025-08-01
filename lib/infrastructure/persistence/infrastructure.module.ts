@@ -26,6 +26,7 @@ import { ProductRepository } from "lib/domain/repositories/ProductRepository";
 import { ProductRepositoryImpl } from "./entities-repository-implement/ProductRepositoryImpl";
 import { SliderRepository } from "lib/domain/repositories/SliderRepository";
 import { SliderRepositoryImpl } from "./entities-repository-implement/SliderRepositoryImpl";
+import { AuthenticationGuard } from "../jwt/authentication.guard";
 @Module({
     imports: [
         JwtModule.registerAsync({

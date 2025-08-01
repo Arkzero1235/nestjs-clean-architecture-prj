@@ -13,6 +13,7 @@ import { OrderModule } from './use-case/order/order.module';
 import { AuthController } from './interface/controllers/auth.controller';
 import { ProductModule } from './use-case/product/product.module';
 import { SliderModule } from './use-case/slider/slider.module';
+import { PayosModule } from './use-case/pay/pay.module';
 
 @Module({
   imports: [
@@ -28,7 +29,8 @@ import { SliderModule } from './use-case/slider/slider.module';
     CommentModule,
     OrderModule,
     ProductModule,
-    SliderModule
+    SliderModule,
+    PayosModule
   ],
   controllers: [AppController],
   providers: [
