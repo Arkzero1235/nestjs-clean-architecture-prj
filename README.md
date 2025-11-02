@@ -78,7 +78,7 @@ PORT=3333
 DATABASE_URL="postgresql://user:password@localhost:5432/DB_name?schema=public"
 JWT_ACCESS_SECRET="your_access_secret"
 JWT_REFRESH_SECRET="your_refresh_secret"
-JWT_ACCESS_EXPIRES_IN=30s
+JWT_ACCESS_EXPIRES_IN=7d
 JWT_REFRESH_EXPIRES_IN=7d
 ```
 
