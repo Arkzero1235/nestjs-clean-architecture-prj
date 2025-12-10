@@ -56,6 +56,8 @@ lib/
 
   - [**PGAdmin 4**](https://www.pgadmin.org/download/)
 
+  - [**NodeJS**](https://nodejs.org/en/download)
+
 ### 1. Clone project
 
 ```bash
