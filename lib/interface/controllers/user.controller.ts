@@ -100,7 +100,7 @@ export class UserController {
         )
     }
 
-    @Roles(["ADMIN"])
+    @Roles(["ADMIN", "CLIENT"])
     @Post()
     @ApiOperation({
         summary: "Tạo 1 tài khoản người dùng - CLIENT - ADMIN"
