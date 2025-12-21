@@ -1,3 +1,4 @@
+import { BadRequestException } from "@nestjs/common";
 import { UserRole } from "../enums/UserRole";
 
 export class User {
@@ -65,25 +66,40 @@ export class User {
         // Check valid
 
         // Validate username
-        if (!props.username || props.username.length < 3) {
-            throw new Error('Username must be at least 3 characters');
+    if (!props.username || props.username.length < 3) {
+        throw new BadRequestException('Username must be at least 3 characters');
+    }
+
+    // Validate email
+    if (!props.email.includes('@')) {
+        throw new BadRequestException('Invalid email address');
+    }
+
+    // Validate role
+    if (!Object.values(UserRole).includes(props.role)) {
+        throw new BadRequestException('Invalid role');
+    }
+
+    // Validate password
+    const password = props.password;
+
+        // 1. Check length: 6 < password < 14
+        if (password.length <= 6 || password.length >= 14) {
+            throw new BadRequestException('Password must be between 7 and 13 characters');
         }
 
-        // Validate email
-        if (!props.email.includes('@')) {
-            throw new Error('Invalid email address');
-        }
+        // 2-5. Check all requirements at once
+        const validations = [
+            { test: /[A-Z]/.test(password), message: 'Password must contain at least one uppercase letter' },
+            { test: /[0-9]/.test(password), message: 'Password must contain at least one number' },
+            { test: /[!@#$%^&*(),.?":{}|<>]/.test(password), message: 'Password must contain at least one special character' },
+            { test: /[a-zA-Z]/.test(password), message: 'Password must contain letters' }
+        ];
 
-        // Validate password hash
-        if (!props.password || props.password.length < 8) {
-            throw new Error('Password is too short');
-        }
-
-        // Validate address
-
-        // Role should be enum value
-        if (!Object.values(UserRole).includes(props.role)) {
-            throw new Error('Invalid role');
+        for (const validation of validations) {
+            if (!validation.test) {
+                throw new BadRequestException(validation.message);
+            }
         }
 
         return props;
