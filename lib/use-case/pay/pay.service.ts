@@ -27,7 +27,7 @@ export class PayosService {
         const signature = generateSignature(paymentData, checksumKey);
 
         // console.log(signature);
-        
+
         // Gửi đi kèm chữ ký
         const payload = {
             ...paymentData,
@@ -45,9 +45,28 @@ export class PayosService {
                 headers,
             });
 
-            console.log(res.data);
-
             return res.data;
+        } catch (err) {
+            console.error('Error:', err.response?.data || err.message);
+            throw err;
+        }
+    }
+
+    async getResult(id: number) {
+        try {
+            const getPayRes = await axios.get(
+                `https://api-merchant.payos.vn/v2/payment-requests/${id}`,
+                {
+                    headers: {
+                        'x-client-id': this.clientId,
+                        'x-api-key': this.apiKey
+                    }
+                }
+            );
+
+            // console.log(getPayRes.data);
+
+            return getPayRes.data;
         } catch (err) {
             console.error('Error:', err.response?.data || err.message);
             throw err;

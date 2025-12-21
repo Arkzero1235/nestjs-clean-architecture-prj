@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Injectable, UseGuards, Logger } from '@nestjs/common';
+import { Controller, Post, Body, Injectable, UseGuards, Logger, Get, Param } from '@nestjs/common';
 import { PayosService } from 'lib/use-case/pay/pay.service';
 import { PayReqDto } from '../dtos/PayReqDto';
 import { AuthenticationGuard } from 'lib/infrastructure/jwt/authentication.guard';
@@ -18,5 +18,10 @@ export class PayosController {
     @Post('create-payment')
     async createPayment(@Body() body: PayReqDto) {
         return this.payosService.createPayment(body);
+    }
+
+    @Get('/:id')
+    async getPaymentResult(@Param('id') id: number) {
+        return this.payosService.getResult(id);
     }
 }
