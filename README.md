@@ -56,6 +56,8 @@ lib/
 
   - [**PGAdmin 4**](https://www.pgadmin.org/download/)
 
+  - [**NodeJS**](https://nodejs.org/en/download)
+
 ### 1. Clone project
 
 ```bash
@@ -74,11 +76,11 @@ npm install
 Tạo file `.env`:
 
 ```env
-PORT=3000
+PORT=3333
 DATABASE_URL="postgresql://user:password@localhost:5432/DB_name?schema=public"
 JWT_ACCESS_SECRET="your_access_secret"
 JWT_REFRESH_SECRET="your_refresh_secret"
-JWT_ACCESS_EXPIRES_IN=30s
+JWT_ACCESS_EXPIRES_IN=7d
 JWT_REFRESH_EXPIRES_IN=7d
 ```
 
@@ -87,7 +89,7 @@ JWT_REFRESH_EXPIRES_IN=7d
 ```bash
 cd lib/infrastructure/database/prisma-orm
 npx prisma migrate dev
-npx generate prisma
+npx prisma generate 
 ```
 
 ### 5. Generate prisma seed 
